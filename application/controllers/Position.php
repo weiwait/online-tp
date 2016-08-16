@@ -1,12 +1,21 @@
 <?php
 
 use base\DaoFactory;
+use services\PushMsg;
 
 require_once "MCommonController.php";
 require_once APP_PATH . "/application/services/PushMsg.php";
 
 class PositionController extends MCommonController
 {
+    private $pushmsg;
+
+    public function init()
+    {
+        parent::init();
+        parent::disableView();
+        $this->pushmsg = new PushMsg;
+    }
 
     /**
      * desc 实现父类抽象方法
@@ -16,38 +25,22 @@ class PositionController extends MCommonController
         return NALL;
     }
 
-    public function positionAction($appid = '', $content = '', $title = '')
+    public function requestPositionAction($appid = '', $selfAppid = '')
     {
-        parent::disableView();
         $appid = parent::getAppid();
         $tpAppid = parent::getTpAppid();
-        $data = $this->filter();
-        $title = $data['title'];
-        $content = $data['content'];
-        $this->addMessage($tpAppid, $appid, $title, $content);
+        $title = 'REQUSETP';
+        $content = parent::getParam('selfAppid');
+        $this->pushmsg->addMessage('', $tpAppid, $appid, $title, $content, '');
     }
 
-    private function addMessage($tpAppid, $appid, $title, $content)
+    public function responsePosition($appid = '',$position = '')
     {
-        $psm = new services\PushMsg;
-        $sql = "INSERT INTO `push_msg` (`tp_appid`, `appid`, `title`, `content`, createtime) VALUES ($tpAppid, '$appid', '$title','$content'," . time() . ")";
-        $push = DaoFactory::getDao("Main")->query($sql);
-        if ($push) {
-            $psm->push();
-        }
+        $appid = parent::getAppid();
+        $tpAppid = parent::getTPAppid();
+        $title = 'RESPONSEP';
+        $content = parent::getParam('position');
+        $this->pushmsg->addMessge('', $tpAppid, $appid, $title, $content, '');
     }
 
-    private function filter()
-    {
-        foreach ($_GET as $key => $item) {
-            $item = htmlspecialchars($item);
-            $item = addslashes($item);
-            $item = quotemeta($item);
-            $item = nl2br($item);
-            $item = strip_tags($item);
-            $item = mysql_real_escape_string($item);
-            $data[$key] = $item;
-        }
-        return $data;
-    }
 }

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="45192e3c-8f35-415a-9688-9fa24b2772b2" name="Default" comment="">
+    <list default="true" id="45192e3c-8f35-415a-9688-9fa24b2772b2" name="Default" comment="position.php update">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/online-tp.iml" afterPath="$PROJECT_DIR$/.idea/online-tp.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/Position.php" afterPath="$PROJECT_DIR$/application/controllers/Position.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/tmp/all.log" afterPath="$PROJECT_DIR$/public/tmp/all.log" />
     </list>
     <ignored path="online-tp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -17,6 +21,14 @@
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
+  <component name="DatabaseView">
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="online-tp" />
@@ -26,10 +38,131 @@
       <file leaf-file-name="Position.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/controllers/Position.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1254">
-              <caret line="41" column="42" selection-start-line="41" selection-start-column="42" selection-end-line="41" selection-end-column="42" />
+            <state relative-caret-position="425">
+              <caret line="45" column="1" selection-start-line="45" selection-start-column="1" selection-end-line="45" selection-end-column="1" />
               <folding>
-                <marker date="1471245693587" expanded="true" signature="782:922" ph="INSERT INTO `push_msg`... " />
+                <element signature="e#7#27#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="App.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/services/App.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="188">
+              <caret line="237" column="0" selection-start-line="237" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
+              <folding>
+                <marker date="1471245093914" expanded="true" signature="305:362" ph="select appid... app" />
+                <marker date="1471245093914" expanded="true" signature="638:716" ph="select id, a... app" />
+                <marker date="1471245093914" expanded="true" signature="947:1002" ph="select id fr... app" />
+                <marker date="1471245093914" expanded="true" signature="1243:1298" ph="select id fr... app" />
+                <marker date="1471245093914" expanded="true" signature="1786:1852" ph="select * fro... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="2134:2202" ph="select * fro... app_use_stat" />
+                <marker date="1471245093914" expanded="true" signature="3118:3159" ph="select tp_ap... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="3783:3843" ph="select * fro... app_use_stat" />
+                <marker date="1471245093914" expanded="true" signature="4672:4726" ph="delete from " />
+                <marker date="1471245093914" expanded="true" signature="5059:5138" ph="select ctime... app_ping" />
+                <marker date="1471245093914" expanded="true" signature="6106:6189" ph="insert into app_ping... " />
+                <marker date="1471245093914" expanded="true" signature="6360:6507" ph="update app_d... " />
+                <marker date="1471245093914" expanded="true" signature="6547:6644" ph="update app_d... " />
+                <marker date="1471245093914" expanded="true" signature="6832:6880" ph="insert into app... " />
+                <marker date="1471245093914" expanded="true" signature="7076:7346" ph="insert into app_detail... " />
+                <marker date="1471245093914" expanded="true" signature="7561:7661" ph="select * fro... bind" />
+                <marker date="1471245093914" expanded="true" signature="7994:8086" ph="insert into bind... " />
+                <marker date="1471245093914" expanded="true" signature="8315:8405" ph="delete from " />
+                <marker date="1471245093914" expanded="true" signature="8555:8621" ph="select count... bind" />
+                <marker date="1471245093914" expanded="true" signature="8873:9046" ph="select bind.... bind" />
+                <marker date="1471245093914" expanded="true" signature="11092:11182" ph="delete from " />
+                <marker date="1471245093914" expanded="true" signature="11324:11416" ph="select * fro... version" />
+                <marker date="1471245093914" expanded="true" signature="11666:11834" ph="insert into feedback... " />
+                <marker date="1471245093914" expanded="true" signature="12399:12456" ph="select tp_ap... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="12528:12586" ph="select tp_ap... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="13130:13168" ph="select count... app" />
+                <marker date="1471245093914" expanded="true" signature="13239:13317" ph="select count... app" />
+                <marker date="1471245093914" expanded="true" signature="13357:13417" ph="select count... app" />
+                <marker date="1471245093914" expanded="true" signature="13873:13950" ph="select count... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="14685:14784" ph="select count... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="14840:14903" ph="select count... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="15691:15748" ph="select tp_ap... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="15820:15878" ph="select tp_ap... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="16445:16539" ph="select * fro... app" />
+                <marker date="1471245093914" expanded="true" signature="16600:16720" ph="select * fro... app" />
+                <marker date="1471245093914" expanded="true" signature="16759:16861" ph="select * fro... app" />
+                <marker date="1471245093914" expanded="true" signature="17121:17187" ph="select * fro... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="17276:17343" ph="select count... bind" />
+                <marker date="1471245093914" expanded="true" signature="18113:18176" ph="select tp_ma... bind" />
+                <marker date="1471245093914" expanded="true" signature="18414:18497" ph="select last_... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="19118:19241" ph="update app_d... " />
+                <marker date="1471245093914" expanded="true" signature="19281:19466" ph="update app_d... " />
+                <marker date="1471245093914" expanded="true" signature="19737:19816" ph="select last_... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="20381:20500" ph="select last_... machine_detail" />
+                <marker date="1471245093914" expanded="true" signature="21527:21579" ph="select * fro... bind" />
+                <marker date="1471245093914" expanded="true" signature="22077:22158" ph="select machi... machine" />
+                <marker date="1471245093914" expanded="true" signature="22744:22827" ph="select longi... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="22892:22999" ph="select longi... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="23080:23188" ph="select longi... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="23912:24003" ph="select sound... app_detail" />
+                <marker date="1471245093914" expanded="true" signature="24767:24984" ph="update app_m... " />
+                <marker date="1471245093914" expanded="true" signature="25236:25350" ph="select * fro... app_machine_config" />
+                <marker date="1471245093914" expanded="true" signature="26339:26453" ph="select * fro... app_machine_config" />
+                <marker date="1471245093914" expanded="true" signature="27481:27502" ph="update app_d... " />
+                <marker date="1471245093914" expanded="true" signature="27896:28010" ph="select 1 fro... app_machine_config" />
+                <marker date="1471245093914" expanded="true" signature="28192:28221" ph="update app_m... " />
+                <marker date="1471245093914" expanded="true" signature="28650:28684" ph="insert into app_machine_config... " />
+                <marker date="1471245093914" expanded="true" signature="29169:29303" ph="select bind.... bind" />
+                <marker date="1471245093914" expanded="true" signature="29559:29760" ph="select 1 fro... app_machine_config" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MCommonController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/controllers/MCommonController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="351">
+              <caret line="307" column="23" selection-start-line="307" selection-start-column="23" selection-end-line="307" selection-end-column="23" />
+              <folding>
+                <marker date="1471245093856" expanded="true" signature="8590:8702" ph="select order... light_order" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Result.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/library/utils/Result.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="297">
+              <caret line="11" column="27" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Front.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/controllers/Front.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="81">
+              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PushMsg.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/services/PushMsg.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="891">
+              <caret line="36" column="55" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
+              <folding>
+                <marker date="1471245093964" expanded="true" signature="747:914" ph="insert into push_msg... " />
+                <marker date="1471245093964" expanded="true" signature="1090:1257" ph="insert into push_msg... " />
+                <marker date="1471245093964" expanded="true" signature="1400:1513" ph="insert into push_msg... " />
+                <marker date="1471245093964" expanded="true" signature="1728:1871" ph="select tp_ap... app_machine_config" />
+                <marker date="1471245093964" expanded="true" signature="2422:2639" ph="insert into push_msg_old... " />
+                <marker date="1471245093964" expanded="true" signature="2763:2814" ph="delete from " />
+                <marker date="1471245093964" expanded="true" signature="3010:3067" ph="delete from " />
+                <marker date="1471245093964" expanded="true" signature="3343:3401" ph="select * fro... push_msg" />
               </folding>
             </state>
           </provider>
@@ -48,6 +181,7 @@
       <list>
         <option value="$PROJECT_DIR$/phpstorm github.test" />
         <option value="$PROJECT_DIR$/application/controllers/Position.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -108,8 +242,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -128,61 +260,17 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="online-tp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="online-tp" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="library" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="online-tp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="online-tp" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="library" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="workerman" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="online-tp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="online-tp" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RunManager">
@@ -251,7 +339,9 @@
       <workItem from="1470995765248" duration="742000" />
       <workItem from="1471050743070" duration="1829000" />
       <workItem from="1471052656472" duration="9585000" />
-      <workItem from="1471245257840" duration="801000" />
+      <workItem from="1471245257840" duration="7524000" />
+      <workItem from="1471310193331" duration="6372000" />
+      <workItem from="1471318579087" duration="1610000" />
     </task>
     <task id="LOCAL-00001" summary="phpstorm remote">
       <created>1471061732492</created>
@@ -267,23 +357,30 @@
       <option name="project" value="LOCAL" />
       <updated>1471245737322</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="position.php update">
+      <created>1471246227658</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1471246227658</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15387000" />
+    <option name="totallyTimeSpent" value="30092000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1382" height="784" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20863836" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20863836" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32937685" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329429" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32937685" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298292" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -315,7 +412,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="8" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -325,7 +422,87 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1471245693587" expanded="true" signature="782:922" ph="INSERT INTO `push_msg`... " />
+            <element signature="e#7#27#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/MCommonController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11988">
+          <caret line="444" column="21" selection-start-line="444" selection-start-column="21" selection-end-line="444" selection-end-column="21" />
+          <folding>
+            <marker date="1471245093856" expanded="true" signature="8590:8702" ph="select order... light_order" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library/utils/Result.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="11" column="27" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Front.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/services/PushMsg.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="972">
+          <caret line="36" column="55" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
+          <folding>
+            <marker date="1471245093964" expanded="true" signature="747:914" ph="insert into push_msg... " />
+            <marker date="1471245093964" expanded="true" signature="1090:1257" ph="insert into push_msg... " />
+            <marker date="1471245093964" expanded="true" signature="1400:1513" ph="insert into push_msg... " />
+            <marker date="1471245093964" expanded="true" signature="1728:1871" ph="select tp_ap... app_machine_config" />
+            <marker date="1471245093964" expanded="true" signature="2422:2639" ph="insert into push_msg_old... " />
+            <marker date="1471245093964" expanded="true" signature="2763:2814" ph="delete from " />
+            <marker date="1471245093964" expanded="true" signature="3010:3067" ph="delete from " />
+            <marker date="1471245093964" expanded="true" signature="3343:3401" ph="select * fro... push_msg" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Position.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="18" column="68" selection-start-line="18" selection-start-column="68" selection-end-line="18" selection-end-column="68" />
+          <folding>
+            <element signature="e#7#27#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/services/PushMsg.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1471245093964" expanded="true" signature="747:914" ph="insert into push_msg... " />
+            <marker date="1471245093964" expanded="true" signature="1090:1257" ph="insert into push_msg... " />
+            <marker date="1471245093964" expanded="true" signature="1400:1513" ph="insert into push_msg... " />
+            <marker date="1471245093964" expanded="true" signature="1728:1871" ph="select tp_ap... app_machine_config" />
+            <marker date="1471245093964" expanded="true" signature="2422:2639" ph="insert into push_msg_old... " />
+            <marker date="1471245093964" expanded="true" signature="2763:2814" ph="delete from " />
+            <marker date="1471245093964" expanded="true" signature="3010:3067" ph="delete from " />
+            <marker date="1471245093964" expanded="true" signature="3343:3401" ph="select * fro... push_msg" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Position.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#7#27#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -335,7 +512,7 @@
         <state relative-caret-position="1056">
           <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
           <folding>
-            <marker date="1471245693587" expanded="true" signature="782:922" ph="INSERT INTO `push_msg`... " />
+            <element signature="e#7#27#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -344,7 +521,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1471245093856" expanded="true" signature="8590:8702" ph="select order... light_order" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -353,35 +532,168 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1471245693587" expanded="true" signature="782:922" ph="INSERT INTO `push_msg`... " />
+            <element signature="e#7#27#0#PHP" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/MCommonController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="359" column="7" selection-start-line="359" selection-start-column="7" selection-end-line="359" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/phpstorm github.test" />
     <entry file="file://$PROJECT_DIR$/application/controllers/githubtest.php" />
-    <entry file="file://$PROJECT_DIR$/Position - 副本.php">
+    <entry file="file://$PROJECT_DIR$/Position - 副本.php" />
+    <entry file="file://$PROJECT_DIR$/conf/application.ini">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+        <state relative-caret-position="429">
+          <caret line="46" column="35" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library/base/DaoFactory.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="27" column="54" selection-start-line="27" selection-start-column="54" selection-end-line="27" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library/umeng/Umeng.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5485">
+          <caret line="151" column="13" selection-start-line="151" selection-start-column="13" selection-end-line="151" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library/workerman/php-5.5.27/server-tests.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="330" column="27" selection-start-line="330" selection-start-column="27" selection-end-line="330" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Front.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/services/PushMsg.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="891">
+          <caret line="36" column="55" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
+          <folding>
+            <marker date="1471245093964" expanded="true" signature="747:914" ph="insert into push_msg... " />
+            <marker date="1471245093964" expanded="true" signature="1090:1257" ph="insert into push_msg... " />
+            <marker date="1471245093964" expanded="true" signature="1400:1513" ph="insert into push_msg... " />
+            <marker date="1471245093964" expanded="true" signature="1728:1871" ph="select tp_ap... app_machine_config" />
+            <marker date="1471245093964" expanded="true" signature="2422:2639" ph="insert into push_msg_old... " />
+            <marker date="1471245093964" expanded="true" signature="2763:2814" ph="delete from " />
+            <marker date="1471245093964" expanded="true" signature="3010:3067" ph="delete from " />
+            <marker date="1471245093964" expanded="true" signature="3343:3401" ph="select * fro... push_msg" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library/utils/Result.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="11" column="27" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/services/App.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="237" column="0" selection-start-line="237" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
+          <folding>
+            <marker date="1471245093914" expanded="true" signature="305:362" ph="select appid... app" />
+            <marker date="1471245093914" expanded="true" signature="638:716" ph="select id, a... app" />
+            <marker date="1471245093914" expanded="true" signature="947:1002" ph="select id fr... app" />
+            <marker date="1471245093914" expanded="true" signature="1243:1298" ph="select id fr... app" />
+            <marker date="1471245093914" expanded="true" signature="1786:1852" ph="select * fro... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="2134:2202" ph="select * fro... app_use_stat" />
+            <marker date="1471245093914" expanded="true" signature="3118:3159" ph="select tp_ap... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="3783:3843" ph="select * fro... app_use_stat" />
+            <marker date="1471245093914" expanded="true" signature="4672:4726" ph="delete from " />
+            <marker date="1471245093914" expanded="true" signature="5059:5138" ph="select ctime... app_ping" />
+            <marker date="1471245093914" expanded="true" signature="6106:6189" ph="insert into app_ping... " />
+            <marker date="1471245093914" expanded="true" signature="6360:6507" ph="update app_d... " />
+            <marker date="1471245093914" expanded="true" signature="6547:6644" ph="update app_d... " />
+            <marker date="1471245093914" expanded="true" signature="6832:6880" ph="insert into app... " />
+            <marker date="1471245093914" expanded="true" signature="7076:7346" ph="insert into app_detail... " />
+            <marker date="1471245093914" expanded="true" signature="7561:7661" ph="select * fro... bind" />
+            <marker date="1471245093914" expanded="true" signature="7994:8086" ph="insert into bind... " />
+            <marker date="1471245093914" expanded="true" signature="8315:8405" ph="delete from " />
+            <marker date="1471245093914" expanded="true" signature="8555:8621" ph="select count... bind" />
+            <marker date="1471245093914" expanded="true" signature="8873:9046" ph="select bind.... bind" />
+            <marker date="1471245093914" expanded="true" signature="11092:11182" ph="delete from " />
+            <marker date="1471245093914" expanded="true" signature="11324:11416" ph="select * fro... version" />
+            <marker date="1471245093914" expanded="true" signature="11666:11834" ph="insert into feedback... " />
+            <marker date="1471245093914" expanded="true" signature="12399:12456" ph="select tp_ap... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="12528:12586" ph="select tp_ap... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="13130:13168" ph="select count... app" />
+            <marker date="1471245093914" expanded="true" signature="13239:13317" ph="select count... app" />
+            <marker date="1471245093914" expanded="true" signature="13357:13417" ph="select count... app" />
+            <marker date="1471245093914" expanded="true" signature="13873:13950" ph="select count... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="14685:14784" ph="select count... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="14840:14903" ph="select count... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="15691:15748" ph="select tp_ap... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="15820:15878" ph="select tp_ap... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="16445:16539" ph="select * fro... app" />
+            <marker date="1471245093914" expanded="true" signature="16600:16720" ph="select * fro... app" />
+            <marker date="1471245093914" expanded="true" signature="16759:16861" ph="select * fro... app" />
+            <marker date="1471245093914" expanded="true" signature="17121:17187" ph="select * fro... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="17276:17343" ph="select count... bind" />
+            <marker date="1471245093914" expanded="true" signature="18113:18176" ph="select tp_ma... bind" />
+            <marker date="1471245093914" expanded="true" signature="18414:18497" ph="select last_... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="19118:19241" ph="update app_d... " />
+            <marker date="1471245093914" expanded="true" signature="19281:19466" ph="update app_d... " />
+            <marker date="1471245093914" expanded="true" signature="19737:19816" ph="select last_... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="20381:20500" ph="select last_... machine_detail" />
+            <marker date="1471245093914" expanded="true" signature="21527:21579" ph="select * fro... bind" />
+            <marker date="1471245093914" expanded="true" signature="22077:22158" ph="select machi... machine" />
+            <marker date="1471245093914" expanded="true" signature="22744:22827" ph="select longi... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="22892:22999" ph="select longi... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="23080:23188" ph="select longi... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="23912:24003" ph="select sound... app_detail" />
+            <marker date="1471245093914" expanded="true" signature="24767:24984" ph="update app_m... " />
+            <marker date="1471245093914" expanded="true" signature="25236:25350" ph="select * fro... app_machine_config" />
+            <marker date="1471245093914" expanded="true" signature="26339:26453" ph="select * fro... app_machine_config" />
+            <marker date="1471245093914" expanded="true" signature="27481:27502" ph="update app_d... " />
+            <marker date="1471245093914" expanded="true" signature="27896:28010" ph="select 1 fro... app_machine_config" />
+            <marker date="1471245093914" expanded="true" signature="28192:28221" ph="update app_m... " />
+            <marker date="1471245093914" expanded="true" signature="28650:28684" ph="insert into app_machine_config... " />
+            <marker date="1471245093914" expanded="true" signature="29169:29303" ph="select bind.... bind" />
+            <marker date="1471245093914" expanded="true" signature="29559:29760" ph="select 1 fro... app_machine_config" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/MCommonController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="307" column="23" selection-start-line="307" selection-start-column="23" selection-end-line="307" selection-end-column="23" />
+          <folding>
+            <marker date="1471245093856" expanded="true" signature="8590:8702" ph="select order... light_order" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/Position.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1254">
-          <caret line="41" column="42" selection-start-line="41" selection-start-column="42" selection-end-line="41" selection-end-column="42" />
+        <state relative-caret-position="425">
+          <caret line="45" column="1" selection-start-line="45" selection-start-column="1" selection-end-line="45" selection-end-column="1" />
           <folding>
-            <marker date="1471245693587" expanded="true" signature="782:922" ph="INSERT INTO `push_msg`... " />
+            <element signature="e#7#27#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
