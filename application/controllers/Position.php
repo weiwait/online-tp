@@ -1,20 +1,20 @@
 <?php
 
 use base\DaoFactory;
-use services\PushMsg;
+
+use base\ServiceFactory;
+
+use umeng\Umeng;
 
 require_once "MCommonController.php";
-require_once APP_PATH . "/application/services/PushMsg.php";
+require_once APP_PATH . "/library/umeng/Umeng.php";
 
 class PositionController extends MCommonController
 {
-    private $pushmsg;
-
     public function init()
     {
         parent::init();
         parent::disableView();
-        $this->pushmsg = new PushMsg;
     }
 
     /**
@@ -25,14 +25,16 @@ class PositionController extends MCommonController
         return NALL;
     }
 
-    public function requestPositionAction($appid = '', $selfAppid = '')
+    public function requestPositionAction()
     {
         $appid = parent::getAppid();
         $tpAppid = parent::getTpAppid();
-        $title = 'REQUESTP';
-        $content = parent::getParam('selfAppid');
+        $title = 'REQUSETP';
+        $content = $title . ':' . parent::getParam('selfAppid');
         if($appid != '' & $content != '') {
-            $status = $this->pushmsg->addMessage('', $tpAppid, $appid, $title, $content, '');
+            // $status = ServiceFactory::getService("PushMsg")->addMessage('', $tpAppid, $appid, $title, $content, '');
+            $Umeng = new \Umeng("57c3fc82e0f55a60930001ab", "vibln1ndpibkxa0mpor4s2datlkbgtm4");
+            $status = $Umeng->sendIOSCustomizedcast($appid, $title, $content, true, true);
             if($status) {
                 $this->addPositionMsg($tpAppid, $appid, $content, $title, '请求定位');
                 $ec['status'] = 1;
@@ -47,7 +49,7 @@ class PositionController extends MCommonController
         }
     }
 
-    public function responsePositionAction($appid = '',$position = '', $selfAppid = '')
+    public function responsePositionAction()
     {
         $appid = parent::getAppid();
         $tpAppid = parent::getTPAppid();
@@ -55,7 +57,7 @@ class PositionController extends MCommonController
         $content = parent::getParam('position');
         $selfAppid = parent::getParam('selfAppid');
         if($appid != '' & $content != '') {
-            $status = $this->pushmsg->addMessage('', $tpAppid, $appid, $title, $content, '');
+            $status = ServiceFactory::getService("PushMsg")->addMessage('', $tpAppid, $appid, $title, $content, '');
             $this->addPositionMsg($tpAppid, $appid, $selfAppid, $title, $content);
             if($status) {
                 $ec['status'] = 1;
@@ -92,7 +94,7 @@ class PositionController extends MCommonController
             $sql = "SELECT * FROM `position_msg` WHERE `createtime` >= '{$timeone}' AND `createtime` <= '{$timetwo}' ORDER BY `createtime` {$reorder} LIMIT {$limit}";
         }elseif(!empty($appid) & !empty($timeone) & empty($type)) {
             //appid和时间查询
-            $sql = "SELECT * FROM `position_msg` WHERE `appid` = '{$appid}' AND `createtime` >= '{$timeone}' AND `createtime` <= '{$timetwo}' ORDER BY `createtime` {$reorder} LIMIT {$limit}";           
+            $sql = "SELECT * FROM `position_msg` WHERE `appid` = '{$appid}' AND `createtime` >= '{$timeone}' AND `createtime` <= '{$timetwo}' ORDER BY `createtime` {$reorder} LIMIT {$limit}";
         }elseif(!empty($appid) & empty($timeone) & !empty($type)) {
             //appid、类型查询
             $sql = "SELECT * FROM `position_msg` WHERE `appid` = '{$appid}' AND `title` = '{$type}' ORDER BY `createtime` {$reorder} LIMIT {$limit}";
