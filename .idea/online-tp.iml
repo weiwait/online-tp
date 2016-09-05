@@ -2,9 +2,6 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <content url="file://$MODULE_DIR$/../web" />
-    <content url="file://$MODULE_DIR$/../weiwait" />
-    <content url="file://$MODULE_DIR$/../workerman" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

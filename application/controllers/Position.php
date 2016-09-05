@@ -1,13 +1,7 @@
 <?php
 
 use base\DaoFactory;
-
 use base\ServiceFactory;
-
-use umeng\Umeng;
-
-require_once "MCommonController.php";
-require_once APP_PATH . "/library/umeng/Umeng.php";
 
 class PositionController extends MCommonController
 {
@@ -22,7 +16,7 @@ class PositionController extends MCommonController
      */
     public function getControlData()
     {
-        return NALL;
+        return null;
     }
 
     public function requestPositionAction()

@@ -2,8 +2,15 @@
 session_start();
 define("APP_PATH",  dirname(dirname(__FILE__)));
 
- $globalTpAppid = 0;
- $globalTpMachineid = 0;
+// 引入composer自动加载
+require dirname(__DIR__) . '/vendor/autoload.php';
+$autoload = new Composer\Autoload\ClassLoader();
+$autoload->register(true);
+$autoload->addClassMap(['MCommonController' => APP_PATH . '/application/controllers/MCommonController.php']);
+// composer autoload end
+
+$globalTpAppid = 0;
+$globalTpMachineid = 0;
 
 $__content = json_encode($_REQUEST);
 file_put_contents("tmp/all.log", date("Y-m-d H:i:s")." ".$__content."\n", FILE_APPEND);
