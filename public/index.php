@@ -7,6 +7,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 $autoload = new Composer\Autoload\ClassLoader();
 $autoload->register(true);
 $autoload->addClassMap(['MCommonController' => APP_PATH . '/application/controllers/MCommonController.php']);
+$autoload->addPsr4('vendor\\', APP_PATH . '/vendor');
 // composer autoload end
 
 $globalTpAppid = 0;

@@ -779,7 +779,7 @@ abstract class MCommonController extends FrontController
     /**
      * @desc 保存配置
      */
-    public function saveConfig($config = null)
+    public function  saveConfig($config = null)
     {
         $this->checkValidMachineAndApp();
         $enableUserNearStart = trim($_REQUEST['enableusernearstart']);

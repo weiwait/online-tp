@@ -10,7 +10,6 @@ class UmengSend extends Service
     public function send($appid, $title, $content, $sound = true, $shock = true)
     {
         echo "into send\n";
-        $ret = 0;
         $phoneType = ServiceFactory::getService("App")->getPhoneType($appid);
 
         $appid = strtolower($appid);

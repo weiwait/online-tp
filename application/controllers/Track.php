@@ -8,17 +8,21 @@
 
 use base\DaoFactory;
 use base\ServiceFactory;
+use vendor\pictureUpload\Upload;
 
 class TrackController extends MCommonController
 {
     /** @var $pdo \PDO */
     private $pdo;
+    /** @var $umeng services\UmengSend */
+    private $umeng;
 
     public function init()
     {
         parent::init();
         parent::disableView();
         $this->pdo = ServiceFactory::getService('MysqlPdo')->getPdo('track');
+        $this->umeng = ServiceFactory::getService('UmengSend');
     }
 
     /**
@@ -58,7 +62,10 @@ class TrackController extends MCommonController
         }
         $company = $this->getValue('company');
         $job = $this->getValue('job');
-        $data = ['name' => $name, 'password' => $password, 'phone' => $phone, 'company' => $company, 'job' => $job];
+        $appId = $this->getValue('appId');
+        $portrait = $this->upload();
+        $portrait = $portrait == false? '': $portrait;
+        $data = ['name' => $name, 'password' => $password, 'phone' => $phone, 'company' => $company, 'job' => $job, 'appId' => $appId, 'portrait' => $portrait];
         $result = $this->doReg($data);
         if ($result > 0) {
             $msg = ['status' => 1, 'message' => 'register successfully'];
@@ -84,13 +91,15 @@ class TrackController extends MCommonController
      */
     private function doReg($data)
     {
-        $sql = "INSERT INTO user(`name`, `password`, `phone`, `company`, `job`) VALUES (?,?,?,?,?)";
+        $sql = 'INSERT INTO `user`(`name`, `password`, `phone`, `company`, `job`, `appId`, `portrait`) VALUES (?,?,?,?,?,?,?)';
         $pdoStatement = $this->pdo->prepare($sql);
         $pdoStatement->bindValue(1, $data['name'], PDO::PARAM_STR);
         $pdoStatement->bindValue(2, $data['password'], PDO::PARAM_STR);
         $pdoStatement->bindValue(3, $data['phone'], PDO::PARAM_STR);
         $pdoStatement->bindValue(4, $data['company'], PDO::PARAM_STR);
         $pdoStatement->bindValue(5, $data['job'], PDO::PARAM_STR);
+        $pdoStatement->bindValue(6, $data['appId'], PDO::PARAM_STR);
+        $pdoStatement->bindValue(7, $data['portrait'], PDO::PARAM_STR);
         $pdoStatement->execute();
         return $this->pdo->lastInsertId();
     }
@@ -99,12 +108,14 @@ class TrackController extends MCommonController
     {
         $username = $this->getValue('name');
         $password = $this->getValue('password');
+        $appId = $this->getValue('appId');
         $data['username'] = $username;
         $data['password'] = md5($password);
         $res = $this->loginVerify($data);
-        if (!false == $res) {
+        $sole = $res['appId'] == $appId? true: false;
+        if (!false == $res && $sole == true) {
             $_SESSION['user_id'] = $res['id'];
-            $msg = ['status' => 1];
+            $msg = ['status' => 1, 'id' => $res['id'], 'name' => $res['name']];
         } else {
             $msg = ['status' => 0];
         }
@@ -122,6 +133,15 @@ class TrackController extends MCommonController
         return $result;
     }
 
+    private function updateOne($table, $setField, $whereField, $whereValue, $value, $valueType)
+    {
+        $type = $valueType == 'string'? PDO::PARAM_STR: PDO::PARAM_INT;
+        $sql = "UPDATE {$table} SET {$setField} = ? WHERE {$whereField} = {$whereValue}";
+        $pdoStatement = $this->pdo->prepare($sql);
+        $pdoStatement->bindValue(1, $value, $type);
+        $pdoStatement->execute();
+    }
+
     public function requestAction()
     {
         $id = $_SESSION['user_id'];
@@ -131,9 +151,13 @@ class TrackController extends MCommonController
             return;
         }
         $friend = $this->getValue('id');
+        $user = $this->getuser('id', $friend);
+        $appId = $user['appId'];
+        $content = "{$friend}:{$user['name']}:ref";
         $result = $this->friendStand($id, $friend, 'request');
         switch ($result) {
             case true:
+                $this->umeng->send($appId, '', $content);
                 $msg = ['status' => 1, 'message' => 'requested'];
                 break;
             case 1:
@@ -247,8 +271,12 @@ class TrackController extends MCommonController
             return;
         }
         $agreeid = $this->getValue('id');
+        $user = $this->getuser('id', $agreeid);
+        $appId = $user['appId'];
+        $content = "{$agreeid}:{$user['name']}:agf";
         $result = $this->friendStand($agreeid, $id, 'agree');
         if ($result) {
+            $this->umeng->send($appId, '', $content);
             $msg = ['status' => 1, 'message' => 'agree become friends'];
         } else {
             $msg = ['status' => 0, 'message' => 'operation defeated'];
@@ -364,6 +392,21 @@ class TrackController extends MCommonController
             $user[] = $this->getuser('id', $value['first']);
         }
         return $user;
+    }
+
+    private function upload()
+    {
+        $up = new Upload();
+        $path = "./portrait/images/";
+        $up -> set("path", $path);
+        $up -> set("maxsize", 2000000);
+        $up -> set("allowtype", array("gif", "png", "jpg","jpeg"));
+        $up -> set("israndname", true);
+        if ($up->upload('portrait')) {
+            return ($up->getFileName());
+        }else {
+            return false;
+        }
     }
 
 }
