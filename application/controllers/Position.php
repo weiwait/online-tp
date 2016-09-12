@@ -1,10 +1,7 @@
 <?php
 
 use base\DaoFactory;
-
 use base\ServiceFactory;
-
-use umeng\Umeng;
 
 require_once "MCommonController.php";
 require_once APP_PATH . "/library/umeng/Umeng.php";
@@ -13,11 +10,14 @@ class PositionController extends MCommonController
 {
     /** @var $pdo \PDO */
     private $pdo;
+    /** @var $umeng services\UmengSend */
+    private $umeng;
     public function init()
     {
         parent::init();
         parent::disableView();
         $this->pdo = ServiceFactory::getService('MysqlPdo')->getPdo('track');
+        $this->umeng = ServiceFactory::getService('UmengSend');
     }
 
     /**
@@ -52,12 +52,10 @@ class PositionController extends MCommonController
 //        $tpAppid = parent::getTpAppid();
         $title = 'REQUSETP';
         $content = $title . ':' . $id . ':' . $_SESSION['user_name'];
+        $content = ['request' => $content];
         ob_start();
         if($appId != '' && $content != '') {
-            // $status = ServiceFactory::getService("PushMsg")->addMessage('', $tpAppid, $appid, $title, $content, '');
-            $Umeng = new \Umeng('57c3fc82e0f55a60930001ab', 'vibln1ndpibkxa0mpor4s2datlkbgtm4');
-            $status = $Umeng->sendIOSCustomizedcast($appId, "", "", false, false, null, $content);
-            // $status = $umeng->sendIOSCustomizedcast($appid, $title, $content, true, true);
+            $status = $this->umeng->send($appId, "", "", false, false, $content);
             ob_get_clean();
             if($status) {
                 $this->addPositionMsg('', $appId, $content, $title, '请求定位');
@@ -89,12 +87,11 @@ class PositionController extends MCommonController
 //        $tpAppid = parent::getTPAppid();
         $title = 'RESPONSEP';
         $content = $title . ':' . parent::getParam('position') . ':' . $id . ':' . $_SESSION['user_name'];
+        $content = ['request' => $content];
         $selfAppid = $_SESSION['user_appId'];
         ob_start();
         if($appId != '' & $content != '') {
-            // $status = ServiceFactory::getService("PushMsg")->addMessage('', $tpAppid, $appid, $title, $content, '');
-            $Umeng = new \Umeng('57c3fc82e0f55a60930001ab', 'vibln1ndpibkxa0mpor4s2datlkbgtm4');
-            $status = $Umeng->sendIOSCustomizedcast($appId, "", "", false, false, null, $content);
+            $status = $this->umeng->send($appId, "", "", false, false, $content);
             $this->addPositionMsg('', $appId, $selfAppid, $title, $content);
             ob_get_clean();
             if($status) {

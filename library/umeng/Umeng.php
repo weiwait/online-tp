@@ -305,7 +305,7 @@ class Umeng
         }
     }
 
-    function sendIOSCustomizedcast($appid, $title, $content, $sound = true, $shock = true, $device_token = null, $request = null)
+    function sendIOSCustomizedcast($appid, $title, $content, $sound = true, $shock = true, $device_token = null, $customContent = [])
     {
         //echo "into sendIOSCustomizedcast appid=" . $appid . ", title=" . $title . "\n";
         $ret = false;
@@ -345,8 +345,10 @@ class Umeng
             // Set 'production_mode' to 'true' if your app is under production mode
             $customizedcast->setPredefinedKeyValue("production_mode", "false");
             print("Sending customizedcast notification, please wait...\r\n");
-            if ($request) {
-                $customizedcast->setCustomizedField("request", $request);
+            if (count($customContent) > 0) {
+                foreach ($customContent as $define => $content) {
+                    $customizedcast->setCustomizedField($define, $content);
+                }
             }
             $customizedcast->send();
             print("Sent SUCCESS\r\n");

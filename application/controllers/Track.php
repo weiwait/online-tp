@@ -166,14 +166,16 @@ class TrackController extends MCommonController
         $user = $this->getuser('id', $friend);
         $appId = $user['appId'];
         $content = "{$friend}:{$user['name']}";
+        $content = ['ask' => $content];
+        $notification = $user['name'] . '请求加为好友';
         $result = $this->friendStand($id, $friend, 'request');
         ob_start();
         switch ($result) {
             case 11:
 //                $this->umeng->send($appId, '', $content);
 
-                $Umeng = new \Umeng('57c3fc82e0f55a60930001ab', 'vibln1ndpibkxa0mpor4s2datlkbgtm4');
-                $status = $Umeng->sendIOSCustomizedcast($appId, "好友请求", $content, true, true, null, $content);
+//                $Umeng = new \Umeng('57c3fc82e0f55a60930001ab', 'vibln1ndpibkxa0mpor4s2datlkbgtm4');
+                $status = $this->umeng->send($appId, 'track', $notification, true, true, $content);
                 $msg = ['status' => 1, 'message' => 'requested', 'umeng' => $status];
                 break;
             case 1:
@@ -335,11 +337,12 @@ class TrackController extends MCommonController
         $user = $this->getuser('id', $agreeid);
         $appId = $user['appId'];
         $content = "{$id}:{$_SESSION['user_name']}";
+        $content = ['approve' => $content];
+        $notification = $_SESSION['user_name']. '已同意好友请求';
         $result = $this->friendStand($agreeid, $id, 'agree');
         ob_start();
         if ($result) {
-            $Umeng = new \Umeng('57c3fc82e0f55a60930001ab', 'vibln1ndpibkxa0mpor4s2datlkbgtm4');
-            $status = $Umeng->sendIOSCustomizedcast($appId, "yes", $content);
+            $status = $this->umeng->send($appId, 'track', $notification, true, true, $content);
             $msg = ['status' => 1, 'message' => 'agree become friends', 'umeng' => $status];
         } else {
             $msg = ['status' => 0, 'message' => 'operation defeated'];
@@ -472,6 +475,17 @@ class TrackController extends MCommonController
         }else {
             return false;
         }
+    }
+
+    public function quitAction()
+    {
+        if ($_SESSION['user_id'] != null) {
+            unset($_SESSION['user_id']);
+            $msg = ['status' => 1];
+        } else {
+            $msg = ['status' => 0];
+        }
+        echo json_encode($msg);
     }
 
 }
