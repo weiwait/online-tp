@@ -400,10 +400,10 @@ class AppController extends MCommonController
 
     public static function yaojunLog($appid, $str, $type)
     {
-        if ($type != 4) {
-            return;
-        }
-        if (AppController::$TESTPUSH && $appid == '72DE3DAA-3088-4F5D-BD1C-3449220A6707') {
+        if (AppController::$TESTPUSH && $appid == 'C1E9B944-EB75-4C89-8FF2-B6F814A76C3E') {
+            if ($type != 4) {
+                $str = "------other-----" . $str;
+            }
             file_put_contents("yaojun.log", date("Y-m-d H:i:s") . $str . "\n", FILE_APPEND);
             return;
         }
@@ -413,20 +413,20 @@ class AppController extends MCommonController
 
     public static function liuLog($appid, $str, $type)
     {
-        if ($type != 4) {
-            return;
-        }
         if (AppController::$TESTPUSH && $appid == '88538244-638A-49ED-BDB3-D5128330F40E') {
+            if ($type != 4) {
+                $str = "------other-----" . $str;
+            }
             file_put_contents("liu.log", date("Y-m-d H:i:s") . $str . "\n", FILE_APPEND);
         }
     }
 
     public static function wangLog($appid, $str, $type)
     {
-        if ($type != 4) {
-            return;
-        }
-        if (AppController::$TESTPUSH && $appid == '1456154149865143') {
+        if (AppController::$TESTPUSH && $appid == '1460347011477710') {
+            if ($type != 4) {
+                $str = "------other-----" . $str;
+            }
             file_put_contents("wang.log", date("Y-m-d H:i:s") . $str . "\n", FILE_APPEND);
         }
     }

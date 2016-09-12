@@ -1,14 +1,23 @@
 <?php
 
 use base\DaoFactory;
+
 use base\ServiceFactory;
+
+use umeng\Umeng;
+
+require_once "MCommonController.php";
+require_once APP_PATH . "/library/umeng/Umeng.php";
 
 class PositionController extends MCommonController
 {
+    /** @var $pdo \PDO */
+    private $pdo;
     public function init()
     {
         parent::init();
         parent::disableView();
+        $this->pdo = ServiceFactory::getService('MysqlPdo')->getPdo('track');
     }
 
     /**
@@ -16,21 +25,42 @@ class PositionController extends MCommonController
      */
     public function getControlData()
     {
-        return null;
+        return NALL;
+    }
+
+    private function getuser($where, $value)
+    {
+        $sql = "SELECT `id`, `name`, `appId` FROM `user` WHERE {$where} = ? LIMIT 1";
+        $pdoStatement = $this->pdo->prepare($sql);
+        $pdoStatement->bindValue(1, $value, PDO::PARAM_STR);
+        $pdoStatement->execute();
+        return $pdoStatement->fetch(PDO::FETCH_ASSOC);
     }
 
     public function requestPositionAction()
     {
-        $appid = parent::getAppid();
-        $tpAppid = parent::getTpAppid();
+        $id = $_SESSION['user_id'];
+        if ($id == null) {
+            $msg = ['status' => 0, 'message' => 'login please'];
+            echo json_encode($msg);
+            return;
+        }
+        $friendId = parent::getParam('id');
+        $friend = $this->getuser('id', $friendId);
+        $appId = $friend['appId'];
+//        $appid = parent::getAppid();
+//        $tpAppid = parent::getTpAppid();
         $title = 'REQUSETP';
-        $content = $title . ':' . parent::getParam('selfAppid');
-        if($appid != '' & $content != '') {
+        $content = $title . ':' . $id . ':' . $_SESSION['user_name'];
+        ob_start();
+        if($appId != '' && $content != '') {
             // $status = ServiceFactory::getService("PushMsg")->addMessage('', $tpAppid, $appid, $title, $content, '');
-            $Umeng = new \Umeng("57c3fc82e0f55a60930001ab", "vibln1ndpibkxa0mpor4s2datlkbgtm4");
-            $status = $Umeng->sendIOSCustomizedcast($appid, $title, $content, true, true);
+            $Umeng = new \Umeng('57c3fc82e0f55a60930001ab', 'vibln1ndpibkxa0mpor4s2datlkbgtm4');
+            $status = $Umeng->sendIOSCustomizedcast($appId, "", "", false, false, null, $content);
+            // $status = $umeng->sendIOSCustomizedcast($appid, $title, $content, true, true);
+            ob_get_clean();
             if($status) {
-                $this->addPositionMsg($tpAppid, $appid, $content, $title, '请求定位');
+                $this->addPositionMsg('', $appId, $content, $title, '请求定位');
                 $ec['status'] = 1;
                 echo json_encode($ec);
             }else {
@@ -41,18 +71,32 @@ class PositionController extends MCommonController
             $ec['status'] = 0;
             echo json_encode($ec);
         }
+        ob_end_flush();
     }
 
     public function responsePositionAction()
     {
-        $appid = parent::getAppid();
-        $tpAppid = parent::getTPAppid();
+        $id = $_SESSION['user_id'];
+        if ($id == null) {
+            $msg = ['status' => 0, 'message' => 'login please'];
+            echo json_encode($msg);
+            return;
+        }
+        $friendId = parent::getParam('id');
+        $friend = $this->getuser('id', $friendId);
+        $appId = $friend['appId'];
+//        $appid = parent::getAppid();
+//        $tpAppid = parent::getTPAppid();
         $title = 'RESPONSEP';
-        $content = parent::getParam('position');
-        $selfAppid = parent::getParam('selfAppid');
-        if($appid != '' & $content != '') {
-            $status = ServiceFactory::getService("PushMsg")->addMessage('', $tpAppid, $appid, $title, $content, '');
-            $this->addPositionMsg($tpAppid, $appid, $selfAppid, $title, $content);
+        $content = $title . ':' . parent::getParam('position') . ':' . $id . ':' . $_SESSION['user_name'];
+        $selfAppid = $_SESSION['user_appId'];
+        ob_start();
+        if($appId != '' & $content != '') {
+            // $status = ServiceFactory::getService("PushMsg")->addMessage('', $tpAppid, $appid, $title, $content, '');
+            $Umeng = new \Umeng('57c3fc82e0f55a60930001ab', 'vibln1ndpibkxa0mpor4s2datlkbgtm4');
+            $status = $Umeng->sendIOSCustomizedcast($appId, "", "", false, false, null, $content);
+            $this->addPositionMsg('', $appId, $selfAppid, $title, $content);
+            ob_get_clean();
             if($status) {
                 $ec['status'] = 1;
                 echo json_encode($ec);
@@ -64,6 +108,7 @@ class PositionController extends MCommonController
             $ec['status'] = 0;
             echo json_encode($ec);
         }
+        ob_end_flush();
     }
 
     public function getPositionMsgAction($appid = '', $type = '', $timeone = '', $timetwo = '', $limit = '', $reorder = '') {

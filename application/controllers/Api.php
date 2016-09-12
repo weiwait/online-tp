@@ -67,6 +67,7 @@ class ApiController extends MCommonController
         $subDataTwo['登录'] = '/api/trackLogin';
         $subDataTwo['添加好友'] = '/api/trackRequest';
         $subDataTwo['同意好友'] = '/api/trackApprove';
+        $subDataTwo['拒绝好友'] = '/api/trackDeny';
         $subDataTwo['删除好友'] = '/api/trackDelete';
         $subDataTwo['获取请求好友列表'] = '/api/trackGetRequest';
         $subDataTwo['获取好友列表'] = '/api/trackFriendList';
@@ -280,7 +281,7 @@ class ApiController extends MCommonController
         $name = "登录";
         $requestNote = "1 用户名为用户名或手机都可登陆。";
         $responseNote = "1 主要用到user表。";
-        $responseDemo = $this->getShowString("登录成功");
+        $responseDemo = $this->getShowString($this->getTrackLoginDemoData());
         $this->apiEndBuild($param, $name, $requestNote, $responseNote, $responseDemo);
     }
 
@@ -289,7 +290,7 @@ class ApiController extends MCommonController
         $param = ApiController::getTrackRequestData();
         $name = "添加好友";
         $requestNote = "1 注意添加的好友为名字或电话。";
-        $responseNote = "1 主要用到user表和friend表。friend表的status字段意思请看数据库。";
+        $responseNote = "1 主要用到user表和friend表。friend表的status字段意思请看数据库。\r\n2 注意会伴随着UMENG提醒";
         $responseDemo = $this->getShowString("添加请求发送成功");
         $this->apiEndBuild($param, $name, $requestNote, $responseNote, $responseDemo);
     }
@@ -309,8 +310,18 @@ class ApiController extends MCommonController
         $param = ApiController::getTrackApproveData();
         $name = "同意好友";
         $requestNote = "";
-        $responseNote = "";
+        $responseNote = "注意会伴随着UMENG提醒";
         $responseDemo = $this->getShowString("同意好友成功");
+        $this->apiEndBuild($param, $name, $requestNote, $responseNote, $responseDemo);
+    }
+
+    public function trackDenyAction()
+    {
+        $param = ApiController::getTrackDenyData();
+        $name = "拒绝好友";
+        $requestNote = "";
+        $responseNote = "注意会伴随着UMENG提醒";
+        $responseDemo = $this->getShowString("拒绝好友成功");
         $this->apiEndBuild($param, $name, $requestNote, $responseNote, $responseDemo);
     }
 
@@ -455,6 +466,13 @@ class ApiController extends MCommonController
         return $data;
     }
 
+    private function getTrackDenyData()
+    {
+        $data['user'] = $this->getParamData('请求者', 'ACC');
+        $data['friend'] = $this->getParamData('被请求者', 'ABC');
+        return $data;
+    }
+
     private function getTrackFriendListData()
     {
         $data['username'] = $this->getParamData('用户名', 'ACC');
@@ -471,6 +489,18 @@ class ApiController extends MCommonController
     {
         $data['id'] = 1;
         $data['name'] = "初三（2）班";
+        return $data;
+    }
+
+    private function getSchoolUserDData()
+    {
+        $data['name'] = '小明';
+        $data['phone'] = '18718743323';
+        $data['school'] = '思明学校';
+        $data['class'] = '1';
+        $data['company'] = '星弈科技';
+        $data['job'] = '设计师';
+        $data['label'] = "10123451234587654321";
         return $data;
     }
 
@@ -646,6 +676,12 @@ class ApiController extends MCommonController
         $friends[1] = $this->getTrackUserDData();
         $friends[2] = $this->getTrackUserDData();
         return $friends;
+    }
+
+    private function getTrackLoginDemoData()
+    {
+        $data['user'] = $this->getTrackUserDData();
+        return $data;
     }
 
     //    /**

@@ -16,7 +16,6 @@ class ControlController extends \Yaf_Controller_Abstract
     }
 
     private $tokenMap = array(
-        "school,regist"=>"appid",
         "app,reg"=>"appid",
         "app,bind"=>"appid,machineid",
         "app,unbind"=>"appid,machineid",

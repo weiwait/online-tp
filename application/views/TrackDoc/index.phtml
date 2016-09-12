@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>track</title>
+    <style>
+        td, th {
+            border: 1px solid #aaa;
+            height: 28px;
+        }
+        table {
+            margin: 18px 50px;
+        }
+    </style>
+</head>
+<body>
+<tbody>
+<table>
+    <tr><th colspan="2">注册</th></tr>
+    <tr>
+        <td>方法</td>
+        <td>register</td>
+    </tr>
+    <tr>
+        <td>密码</td>
+        <td>password</td>
+    </tr>
+    <tr>
+        <td>手机</td>
+        <td>phone</td>
+    </tr>
+    <tr>
+        <td>公司</td>
+        <td>company</td>
+    </tr>
+    <tr>
+        <td>工作</td>
+        <td>job</td>
+    </tr>
+    <tr>
+        <td>手机标识</td>
+        <td>appId</td>
+    </tr>
+    <tr>
+        <td>头像</td>
+        <td>portrait</td>
+    </tr>
+    <tr>
+        <td>成功返回</td>
+        <td>{status:1,message:register successfully}</td>
+    </tr>
+    <tr>
+        <td>失败返回</td>
+        <td>{status:0,message:register defeated}</td>
+    </tr>
+    <tr>
+        <td>访问</td>
+        <td>http://host/Track/register/name/---/password/---/phone/---/company/---/job/---/appId/---/portrait</td>
+    </tr>
+    <tr>
+        <td>说明</td>
+        <td>该方法是由表单提交，post协议，上面路径是get测试路径</td>
+    </tr>
+</table>
+<table>
+    <tr><th colspan="2">登录</th></tr>
+    <tr>
+        <td>方法</td>
+        <td>login</td>
+    </tr>
+    <tr>
+        <td>用户名</td>
+        <td>name</td>
+    </tr>
+    <tr>
+        <td>密码</td>
+        <td>password</td>
+    </tr>
+    <tr>
+        <td>手机标识</td>
+        <td>appId</td>
+    </tr>
+    <tr>
+        <td>成功返回</td>
+        <td>{status:1,id:userId,name:userName}</td>
+    </tr>
+    <tr>
+        <td>失败返回</td>
+        <td>{status:0}</td>
+    </tr>
+    <tr>
+        <td>访问</td>
+        <td>http://host/Track/login/name/---/password/---/appId/---</td>
+    </tr>
+    <tr>
+        <td>说明</td>
+        <td>该方法是由表单提交，post协议，上面路径是get测试路径</td>
+    </tr>
+</table>
+<table>
+    <tr><th colspan="2">请求好友</th></tr>
+    <tr>
+        <td>方法</td>
+        <td>request</td>
+    </tr>
+    <tr>
+        <td>被请求者id</td>
+        <td>id</td>
+    </tr>
+    <tr>
+        <td>成功返回</td>
+        <td>{status:1,message:requested}</td>
+    </tr>
+    <tr>
+        <td>成功后友盟推送</td>
+        <td>id:name:ref</td>
+    </tr>
+    <tr>
+        <td>失败返回</td>
+        <td>{status:0,message:request be defeated}</td>
+    </tr>
+    <tr>
+        <td>已经是好友返回</td>
+        <td>{status:2,message:is already a friend}</td>
+    </tr>
+    <tr>
+        <td>已被拒绝返回</td>
+        <td>{status:3,message:has been refused}</td>
+    </tr>
+    <tr>
+        <td>访问</td>
+        <td>http://host/Track/request/id/---</td>
+    </tr>
+    <tr>
+        <td>说明</td>
+        <td>该方法应是在查找之后使用的，可使用get or post请求。友盟内容是用户id和名字和ref标识</td>
+    </tr>
+</table>
+<table>
+    <tr><th colspan="2">搜索用户</th></tr>
+    <tr>
+        <td>方法</td>
+        <td>searchUser</td>
+    </tr>
+    <tr>
+        <td>被搜索者手机</td>
+        <td>phone</td>
+    </tr>
+    <tr>
+        <td>成功返回</td>
+        <td>{status:1,id:userId,name:userName}</td>
+    </tr>
+    <tr>
+        <td>失败返回</td>
+        <td>{status:0,message:the user not found}</td>
+    </tr>
+    <tr>
+        <td>访问</td>
+        <td>http://host/Track/searchUser/phone/---</td>
+    </tr>
+    <tr>
+        <td>说明</td>
+        <td>该方法使用手机号码查找，存在返回被查找人信息，可使用get or post请求。</td>
+    </tr>
+</table>
+<table>
+    <tr><th colspan="2">同意请求好友</th></tr>
+    <tr>
+        <td>方法</td>
+        <td>approve</td>
+    </tr>
+    <tr>
+        <td>申请好友者id</td>
+        <td>id</td>
+    </tr>
+    <tr>
+        <td>成功返回</td>
+        <td>{status:1,message:agree become friends}</td>
+    </tr>
+    <tr>
+        <td>失败返回</td>
+        <td>{status:0,message:operation defeated}</td>
+    </tr>
+    <tr>
+        <td>访问</td>
+        <td>http://host/Track/approve/id/---</td>
+    </tr>
+    <tr>
+        <td>说明</td>
+        <td>该方法，可使用get or post请求。</td>
+    </tr>
+</table>
+<table>
+    <tr><th colspan="2">拒绝请求好友</th></tr>
+    <tr>
+        <td>方法</td>
+        <td>refused</td>
+    </tr>
+    <tr>
+        <td>申请好友者id</td>
+        <td>id</td>
+    </tr>
+    <tr>
+        <td>成功返回</td>
+        <td>{status:1,message:has refused}</td>
+    </tr>
+    <tr>
+        <td>失败返回</td>
+        <td>{status:0,message:operation defeated}</td>
+    </tr>
+    <tr>
+        <td>访问</td>
+        <td>http://host/Track/refused/id/---</td>
+    </tr>
+    <tr>
+        <td>说明</td>
+        <td>该方法，可使用get or post请求。</td>
+    </tr>
+</table>
+<table>
+    <tr><th colspan="2">删除好友</th></tr>
+    <tr>
+        <td>方法</td>
+        <td>friendDelete</td>
+    </tr>
+    <tr>
+        <td>好友id</td>
+        <td>id</td>
+    </tr>
+    <tr>
+        <td>成功返回</td>
+        <td>{status:1,message:delete a friend successfully}</td>
+    </tr>
+    <tr>
+        <td>失败返回</td>
+        <td>{status:0,message:operation defeated}</td>
+    </tr>
+    <tr>
+        <td>访问</td>
+        <td>http://host/Track/friendDelete/id/---</td>
+    </tr>
+    <tr>
+        <td>说明</td>
+        <td>该方法，可使用get or post请求。</td>
+    </tr>
+</table>
+<table>
+    <tr><th colspan="2">好友列表</th></tr>
+    <tr>
+        <td>方法</td>
+        <td>friendList</td>
+    </tr>
+    <tr>
+        <td>成功返回</td>
+        <td>[{id:userId,name:userName}]</td>
+    </tr>
+    <tr>
+        <td>访问</td>
+        <td>http://host/Track/friendList</td>
+    </tr>
+    <tr>
+        <td>说明</td>
+        <td>该方法，可使用get or post请求。</td>
+    </tr>
+</table>
+<table>
+    <tr><th colspan="2">申请好友列表</th></tr>
+    <tr>
+        <td>方法</td>
+        <td>getRequest</td>
+    </tr>
+    <tr>
+        <td>成功返回</td>
+        <td>[{id:userId,name:userName}]</td>
+    </tr>
+    <tr>
+        <td>访问</td>
+        <td>http://host/Track/friendList</td>
+    </tr>
+    <tr>
+        <td>说明</td>
+        <td>该方法，可使用get or post请求。</td>
+    </tr>
+</table>
+</tbody>
+</body>
+</html>

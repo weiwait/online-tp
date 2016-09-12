@@ -87,13 +87,48 @@ abstract class MCommonController extends FrontController
     }
 
     /**
+     * 获取返回数据字符串
+     * @param $msg
+     */
+    protected function getShowString($data)
+    {
+        return urldecode($this->getJson(array(
+            "status" => 1,
+            "data" => $this->accUrlencode($data),
+        )));
+    }
+
+    /**
+     * 获取错误字符串
+     * @param $msg
+     */
+    protected function getErrorString($error)
+    {
+        return urldecode($this->getJson(array(
+            "status" => 0,
+            "data" => urlencode($error),
+        )));
+    }
+
+    /**
+     * 获取参数相关值
+     * @param $msg
+     */
+    protected function getParamData($name, $hint, $note)
+    {
+        $data['name'] = $name;
+        $data['hint'] = $hint;
+        return $data;
+    }
+
+    /**
      * 获取参数值
      */
-    protected function getParam($key)
+    protected function getParam($key, $default = null)
     {
         $value = $_REQUEST[$key];
         if (!$value) {
-            $value = $this->getRequest()->getParam($key, null);
+            $value = $this->getRequest()->getParam($key, $default);
         }
         return trim($value);
     }
@@ -466,7 +501,7 @@ abstract class MCommonController extends FrontController
     /**
      * 关闭电器
      */
-    protected function stopMachine()
+    protected function stopMachine($needReturn = true)
     {
         if ($this->isMultiMachine()) {
             $this->disableView();
@@ -477,13 +512,15 @@ abstract class MCommonController extends FrontController
             }
         }
         stopMachine($this->getControlData(), $this->getMachineid());
-        $this->showOk("ok");
+        if ($needReturn) {
+            $this->showOk("ok");
+        }
     }
 
     /**
      * 开始电器
      */
-    protected function startMachine()
+    protected function startMachine($needReturn = true)
     {
         if ($this->isMultiMachine()) {
             $this->disableView();
@@ -494,7 +531,9 @@ abstract class MCommonController extends FrontController
             }
         }
         startMachine($this->getControlData(), $this->getMachineid());
-        $this->showOk("ok");
+        if ($needReturn) {
+            $this->showOk("ok");
+        }
     }
 
     /**
@@ -779,7 +818,7 @@ abstract class MCommonController extends FrontController
     /**
      * @desc 保存配置
      */
-    public function  saveConfig($config = null)
+    public function saveConfig($config = null)
     {
         $this->checkValidMachineAndApp();
         $enableUserNearStart = trim($_REQUEST['enableusernearstart']);

@@ -725,15 +725,14 @@ class Attendance extends Service
      */
     public function checkLabelLeave()
     {
-        //TODO 检查离开问题
-        $sql = "select * from attendance_punch_label where leavenote<>1 order by id desc limit 100";
+        $sql = "select * from attendance_punch_label where leave_note<>1 order by id desc limit 100";
         $data = DaoFactory::query('1', $sql);
         $now = time();
         foreach ($data as $item) {
             $time_dirr = $now - $item['leave_time'];
-            if ($time_dirr > 420) {
-                ServiceFactory::getService("PushMsg")->addSilentMessage($item[''], $appid);
-                $this->leaveLabel($item['leave_time']);
+            if ($time_dirr > 360) {
+                ServiceFactory::getService("Attendance")->pushLabelNotification($item['tp_labelid'], true);
+                $this->leaveLabel($item['id']);
             }
         }
     }
@@ -754,14 +753,14 @@ class Attendance extends Service
 
     public function pushLabelNotification($labelId, $isLeave = false)
     {
-        if (\AppController::$TESTPUSH && $labelId == '2015') {
-            \AppController::yaojunLog('72DE3DAA-3088-4F5D-BD1C-3449220A6707', '||||||||||A silent...', 4);
-            ServiceFactory::getService("PushMsg")->addSilentMessage('452', '72DE3DAA-3088-4F5D-BD1C-3449220A6707');
+        if (\AppController::$TESTPUSH && $labelId == '1112') {
+            \AppController::yaojunLog('C1E9B944-EB75-4C89-8FF2-B6F814A76C3E', '||||||||||A silent...', 4);
+            ServiceFactory::getService("PushMsg")->addSilentMessage('456', 'C1E9B944-EB75-4C89-8FF2-B6F814A76C3E');
             return;
         }
         if (\AppController::$TESTPUSH && $labelId == '1105') {
-            \AppController::wangLog('1456154149865143', '||||||||||A silent...', 4);
-            ServiceFactory::getService("PushMsg")->addSilentMessage('262', '1456154149865143');
+            \AppController::wangLog('1460347011477710', '||||||||||A silent...', 4);
+            ServiceFactory::getService("PushMsg")->addSilentMessage('342', '1460347011477710');
             return;
         }
         if (\AppController::$TESTPUSH && $labelId == '1107') {

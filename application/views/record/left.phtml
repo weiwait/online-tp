@@ -1,0 +1,22 @@
+<?php use utils\Common; ?>
+<?php require Common::getRequirePath() . "/header.phtml"; ?>
+<?php
+if (false !== strpos($_SERVER['HTTP_HOST'], "sunyie")) {
+    echo "<h1><font color='red'>线上环境</font></h1>";
+} else {
+    echo "<h1>测试环境</h1>";
+}
+?>
+<table>
+    <?php
+    foreach ($data as $key => $val) {
+        echo "<tr><td>【" . $key . "】</td></tr>";
+        foreach ($val as $key => $val) {
+            echo "<tr><td><a href='" . $val . "' target='right_frame'>" . $key . "</a></td><tr>";
+        }
+    }
+    ?>
+</table>
+
+<?php require Common::getRequirePath() . "/footer.phtml"; ?>
+

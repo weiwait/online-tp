@@ -229,7 +229,7 @@ function machineControlDo($call)
     socket_connect($socket, '127.0.0.1', 1234);
     $in = $machineid . "::";
     $in .= "HTTP/1.1 200 OK\r\n";
-    $in .= "Date:" . date("D, d M Y H:i:s T", time()) . "\r\n";
+    $in .= "Date:" . gmdate("D, d M Y H:i:s T", time()) . "\r\n";
     $in .= "Content-Length:" . strlen($call) . "\r\n\r\n";
     $in .= $call;
     socket_write($socket, $in, strlen($in));

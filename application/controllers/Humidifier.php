@@ -4,18 +4,15 @@ use base\DaoFactory;
 use utils\Common;
 use utils\Result;
 
-include_once "MCommonController.php";
-
-class HumidifierController extends MCommonController
-{
-    /**
-     * 初始化
-     */
-    //    public function init()
-    //    {
-    //        //check_admin();
-    //        parent::init();
-    //    }
+class HumidifierController extends FrontController {
+	/**
+	 * 初始化
+	 */
+	public function init() 
+    {
+        //check_admin();
+		parent::init ();
+	}
 
     /**
      * @desc 保存配置
@@ -24,27 +21,31 @@ class HumidifierController extends MCommonController
     {
         global $globalTpAppid, $globalTpMachineid;
 
-        $machineid = trim($_REQUEST['machineid']);
-        if (empty($machineid)) {
+        $machineid = trim($_REQUEST['machineid']); 
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg");
         }
 
-        $appid = trim($_REQUEST['appid']);
+        $appid = trim($_REQUEST['appid']); 
         $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        if (empty($tpAppid)) {
-            Result::showError("appid " . $appid . " have not reg");
+        if(empty($tpAppid))
+        {
+            Result::showError("appid ".$appid." have not reg");
         }
         //用于调试的
         $globalTpMachineid = $tpMachineid;
         $globalTpAppid = $tpAppid;
 
         $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        if (!$flag) {
-            Result::showError("appid " . $appid . " have not bind machineid " . $machineid . "");
+        if(!$flag)
+        {
+            Result::showError("appid ".$appid." have not bind machineid ".$machineid."");
         }
 
         ServiceFactory::getService("App")->active($tpAppid);
@@ -73,52 +74,64 @@ class HumidifierController extends MCommonController
         $startAndStopRemind = trim($_REQUEST['startandstopremind']);
         $noWaterRemind = trim($_REQUEST['nowaterremind']);
         $tooDryRemind = trim($_REQUEST['toodryremind']);
-        if ($startAndStopRemind) {
+        if($startAndStopRemind)
+        {
             $startAndStopRemind = 1;
-        } else {
+        }
+        else
+        {
             $startAndStopRemind = 0;
         }
-
-        if ($noWaterRemind) {
+        
+        if($noWaterRemind)
+        {
             $noWaterRemind = 1;
-        } else {
+        }
+        else
+        {
             $noWaterRemind = 0;
         }
 
-        if ($tooDryRemind) {
+        if($tooDryRemind)
+        {
             $tooDryRemind = 1;
-        } else {
+        }
+        else
+        {
             $tooDryRemind = 0;
         }
 
-        $enableAi = $enableAi ? 1 : 0;
-        $enableUserNearStart = $enableUserNearStart ? 1 : 0;
-        $enableUserFarStop = $enableUserFarStop ? 1 : 0;
+        $enableAi = $enableAi?1:0;
+        $enableUserNearStart = $enableUserNearStart?1:0;
+        $enableUserFarStop = $enableUserFarStop?1:0;
 
         $data = array(
-            "tp_machineid" => $tpMachineid,
-            "drymode" => $drymode,
-            "wetmode" => $wetmode,
+            "tp_machineid"=>$tpMachineid,
+            "drymode"=>$drymode,
+            "wetmode"=>$wetmode,
             //"enable_ai"=>$enableAi,
             //"enable_user_near_start"=>$enableUserNearStart,
             //"enable_user_far_stop"=>$enableUserFarStop,
-            "last_update_time" => time(),
+            "last_update_time"=>time(),
             //"start_and_stop_remind"=>$startAndStopRemind,
             //"no_water_remind"=>$noWaterRemind,
         );
 
-        $flag = ServiceFactory::getService("Humidifier")->update($tpMachineid, $data);
-        if ($flag) {
+        $flag = ServiceFactory::getService("Humidifier")->update($tpMachineid, $data); 
+        if($flag)
+        {
             ServiceFactory::getService("App")->updateConfig($tpAppid, $tpMachineid, array(
-                "humidifier_no_water_remind" => $noWaterRemind,
-                "humidifier_start_remind" => $startAndStopRemind,
-                "humidifier_end_remind" => $startAndStopRemind,
-                "humidifier_too_dry_remind" => $tooDryRemind,
-                "enable_user_near_start" => $enableUserNearStart,
-                "enable_user_far_stop" => $enableUserFarStop,
+                "humidifier_no_water_remind"=>$noWaterRemind,
+                "humidifier_start_remind"=>$startAndStopRemind,
+                "humidifier_end_remind"=>$startAndStopRemind,
+                "humidifier_too_dry_remind"=>$tooDryRemind,
+                "enable_user_near_start"=>$enableUserNearStart,
+                "enable_user_far_stop"=>$enableUserFarStop,
             ));
             Result::showOk("ok");
-        } else {
+        }
+        else
+        {
             Result::showError("system error");
         }
     }
@@ -129,33 +142,38 @@ class HumidifierController extends MCommonController
     public function getconfigAction()
     {
         global $globalTpAppid, $globalTpMachineid;
-        $machineid = trim($_REQUEST['machineid']);
-        if (empty($machineid)) {
+        $machineid = trim($_REQUEST['machineid']); 
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg");
         }
 
-        $appid = trim($_REQUEST['appid']);
+        $appid = trim($_REQUEST['appid']); 
         $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        if (empty($tpAppid)) {
-            Result::showError("appid " . $appid . " have not reg");
+        if(empty($tpAppid))
+        {
+            Result::showError("appid ".$appid." have not reg");
         }
 
         $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        if (!$flag) {
-            Result::showError("appid " . $appid . " have not bind machineid " . $machineid . "");
+        if(!$flag)
+        {
+            Result::showError("appid ".$appid." have not bind machineid ".$machineid."");
         }
         $globalTpMachineid = $tpMachineid;
         $globalTpAppid = $tpAppid;
 
         ServiceFactory::getService("App")->active($tpAppid);
 
-
+        
         $data = ServiceFactory::getService("Humidifier")->getConfig($tpMachineid);
-        if ($data) {
+        if($data)
+        {
             //在这里重新获取app的智能配置
             $startStopDetail = ServiceFactory::getService("App")->getHumidifierStartStop($tpAppid, $tpMachineid);
             $data['enableusernearstart'] = $startStopDetail['enableUserNearStart'];
@@ -166,7 +184,9 @@ class HumidifierController extends MCommonController
             $data['enableai'] = 0;
 
             Result::showOk($data);
-        } else {
+        }
+        else
+        {
             Result::showError("system error");
         }
     }
@@ -178,23 +198,27 @@ class HumidifierController extends MCommonController
     {
         \Yaf_Dispatcher::getInstance()->disableView();
         $machineid = trim($_REQUEST['machineid']);
-        if (empty($machineid)) {
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg");
         }
 
         ServiceFactory::getService("Machine")->active($tpMachineid);
-
+        
         $detail = ServiceFactory::getService("Humidifier")->getWork($tpMachineid);
 
         //心跳快慢速模式
-        if (empty($detail['top'])) {
+        if(empty($detail['top']))
+        {
             $detail['top'] = '70%';
         }
-        if (empty($detail['bottom'])) {
+        if(empty($detail['bottom']))
+        {
             $detail['bottom'] = '40%';
         }
 
@@ -206,54 +230,62 @@ class HumidifierController extends MCommonController
      */
     public function stopAction()
     {
-        //        $machineid = trim($_REQUEST['machineid']);
-        //        if (empty($machineid)) {
-        //            Result::showError("machineid is empty");
-        //        }
-        //        $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        //        if (empty($tpMachineid)) {
-        //            Result::showError("machineid " . $machineid . " have not reg");
-        //        }
-        //
-        //        $appid = trim($_REQUEST['appid']);
-        //        $tpAppid = 0;
-        //        if ($appid != "00000000-0000-0000-0000-000000000000") {
-        //            $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        //            if (empty($tpAppid)) {
-        //                Result::showError("appid " . $appid . " have not reg");
-        //            }
-        //
-        //            $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        //            if (!$flag) {
-        //                Result::showError("appid " . $appid . " have not bind machineid " . $machineid . "");
-        //            }
-        //
-        //            ServiceFactory::getService("App")->active($tpAppid);
-        //        }
-        //
-        //        //停止工作
-        //        //$flag = ServiceFactory::getService("Humidifier")->stopWork($tpMachineid);
-        //        $data = array(
-        //            "tp_machineid" => $tpMachineid,
-        //            "run" => 0,
-        //            "starttime" => 0,
-        //            "grade" => 0,
-        //            "anion" => 0,
-        //        );
-        //        $flag = ServiceFactory::getService("Humidifier")->addWork($tpMachineid, $data);
-        //        if ($flag) {
-        //            if (0 != $tpAppid) {
-        //                //ServiceFactory::getService("Humidifier")->updateStateOnly($tpMachineid, 0);
-        //
-        //                //推送关闭消息
-        //                //ServiceFactory::getService("PushMsg")->pushHumidifierStop($tpMachineid);
-        //            }
-        //            Result::showOk("ok");
-        //        } else {
-        //            Result::showError("system error");
-        //        }
-        $this->stopMachine();
+        $machineid = trim($_REQUEST['machineid']); 
+        if(empty($machineid))
+        {
+            Result::showError("machineid is empty");
+        }
+        $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg");
+        }
 
+        $appid = trim($_REQUEST['appid']); 
+        $tpAppid = 0;
+        if($appid != "00000000-0000-0000-0000-000000000000")
+        {
+            $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
+            if(empty($tpAppid))
+            {
+                Result::showError("appid ".$appid." have not reg");
+            }
+
+            $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
+            if(!$flag)
+            {
+                Result::showError("appid ".$appid." have not bind machineid ".$machineid."");
+            }
+
+            ServiceFactory::getService("App")->active($tpAppid);
+        }
+
+        //停止工作
+        //$flag = ServiceFactory::getService("Humidifier")->stopWork($tpMachineid);
+        $data = array(
+            "tp_machineid"=>$tpMachineid,
+            "run"=>0,
+            "starttime"=>0,
+            "grade"=>0,
+            "anion"=>0,
+        );
+        $flag = ServiceFactory::getService("Humidifier")->addWork($tpMachineid, $data);
+        if($flag)
+        {
+            if(0 != $tpAppid)
+            {
+                //ServiceFactory::getService("Humidifier")->updateStateOnly($tpMachineid, 0);
+
+                //推送关闭消息
+                //ServiceFactory::getService("PushMsg")->pushHumidifierStop($tpMachineid);
+            }
+            Result::showOk("ok");
+        }
+        else
+        {
+            Result::showError("system error");    
+        }
+    
     }
 
     /**
@@ -261,86 +293,80 @@ class HumidifierController extends MCommonController
      */
     public function startAction()
     {
-        //        $machineid = trim($_REQUEST['machineid']);
-        //        if (empty($machineid)) {
-        //            Result::showError("machineid is empty");
-        //        }
-        //        $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        //        if (empty($tpMachineid)) {
-        //            Result::showError("machineid " . $machineid . " have not reg");
-        //        }
-        //
-        //        $appid = $_REQUEST['appid'];
-        //        //假如是手动模式 tpAppid就是0
-        //        $tpAppid = 0;
-        //        if ($appid != "00000000-0000-0000-0000-000000000000") {
-        //            $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        //            if (empty($tpAppid)) {
-        //                Result::showError("appid " . $appid . " have not reg");
-        //            }
-        //
-        //            $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        //            if (!$flag) {
-        //                Result::showError("appid " . $appid . " have not bind machineid " . $machineid . "");
-        //            }
-        //
-        //            ServiceFactory::getService("App")->active($tpAppid);
-        //            //$isSummerMode = trim($_REQUEST['issummermode']);
-        //            $grade = trim($_REQUEST['grade']);
-        //            $grade = intval($grade);
-        //            $anion = trim($_REQUEST['anion']);
-        //            $anion = intval($anion);
-        //            $delay = trim($_REQUEST['delay']);
-        //        } else {
-        //            //手工开的，默认是开负离子
-        //            $grade = 3;
-        //            $anion = 1;
-        //            $delay = 0;
-        //        }
+        $machineid = trim($_REQUEST['machineid']); 
+        if(empty($machineid))
+        {
+            Result::showError("machineid is empty");
+        }
+        $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg");
+        }
 
-        //        if ($grade < 1) {
-        //            $grade = 1;
-        //        }
-        //        $starttime = time() + intval($delay);
-        //        $run = 0;
-        //        if (0 == $delay) {
-        //            $run = 1;
-        //        }
-        //
-        //        $data = array(
-        //            "tp_machineid" => $tpMachineid,
-        //            "run" => $run,
-        //            "starttime" => $starttime,
-        //            "grade" => $grade,
-        //            "anion" => $anion,
-        //            //"is_summer_mode"=>$isSummerMode,
-        //        );
-        //        $flag = ServiceFactory::getService("Humidifier")->addWork($tpMachineid, $data);
-        //        if ($flag) {
-        //            ServiceFactory::getService("Humidifier")->setLastGrade($tpMachineid, $grade, $anion);
-        //            ServiceFactory::getService("Humidifier")->updateStateOnly($tpMachineid, 1, $tpAppid, $appid);
-        //            Result::showOk("ok");
-        //        } else {
-        //            Result::showError("system error");
-        //        }
-        $this->startMachine();
-    }
+        $appid = $_REQUEST['appid']; 
+        //假如是手动模式 tpAppid就是0
+        $tpAppid = 0;
+        if($appid != "00000000-0000-0000-0000-000000000000")
+        {
+            $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
+            if(empty($tpAppid))
+            {
+                Result::showError("appid ".$appid." have not reg");
+            }
 
-    public function getControlData()
-    {
-        $grade = intval(trim($_REQUEST['grade']);
-        $anion = intval(trim($_REQUEST['anion']));
-        $delay = intval(trim($_REQUEST['delay']));
-        $starttime = time() + $delay;
-        if ($grade < 1) {
+            $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
+            if(!$flag)
+            {
+                Result::showError("appid ".$appid." have not bind machineid ".$machineid."");
+            }
+
+            ServiceFactory::getService("App")->active($tpAppid);
+            //$isSummerMode = trim($_REQUEST['issummermode']);
+            $grade = trim($_REQUEST['grade']);
+            $grade = intval($grade);
+            $anion = trim($_REQUEST['anion']);
+            $anion = intval($anion);
+            $delay = trim($_REQUEST['delay']);
+        }
+        else
+        {
+            //手工开的，默认是开负离子
+            $grade = 3;
+            $anion = 1; 
+            $delay = 0;
+        }
+
+        if($grade < 1)
+        {
             $grade = 1;
         }
-        return array(
-            "l" => $grade,
-            "t" => $anion,
-            "r" => $delay,
-            "g" => $starttime
+        $starttime = time() + intval($delay);
+        $run = 0;
+        if(0 == $delay)
+        {
+            $run = 1; 
+        }
+   
+        $data = array(
+            "tp_machineid"=>$tpMachineid,
+            "run"=>$run,
+            "starttime"=>$starttime,
+            "grade"=>$grade,
+            "anion"=>$anion,
+            //"is_summer_mode"=>$isSummerMode,
         );
+        $flag = ServiceFactory::getService("Humidifier")->addWork($tpMachineid, $data);
+        if($flag)
+        {
+            ServiceFactory::getService("Humidifier")->setLastGrade($tpMachineid, $grade, $anion);
+            ServiceFactory::getService("Humidifier")->updateStateOnly($tpMachineid, 1, $tpAppid, $appid);
+            Result::showOk("ok");
+        }
+        else
+        {
+            Result::showError("system error");    
+        }
     }
 
     /**
@@ -356,78 +382,90 @@ class HumidifierController extends MCommonController
         $pagesize = trim($_REQUEST['pagesize']);
 
         $page = intval($page);
-        if ($page < 1) {
+        if($page < 1)
+        {
             $page = 1;
         }
-        if ($pagesize < 1) {
-            $pagesize = 10;
+        if($pagesize < 1)
+        {
+            $pagesize = 10; 
         }
 
-        if (empty($machineid)) {
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
-        if (empty($appid)) {
+        if(empty($appid))
+        {
             Result::showError("appid is empty");
         }
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg");
         }
 
         $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        if (empty($tpAppid)) {
-            Result::showError("appid " . $appid . " have not reg");
+        if(empty($tpAppid))
+        {
+            Result::showError("appid ".$appid." have not reg");
         }
 
         $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        if (!$flag) {
-            Result::showError("appid " . $appid . " have not bind machineid " . $machineid . "");
+        if(!$flag)
+        {
+            Result::showError("appid ".$appid." have not bind machineid ".$machineid."");
         }
 
         ServiceFactory::getService("App")->active($tpAppid);
 
         $total = ServiceFactory::getService("Humidifier")->getActionLogNum($tpMachineid, $tpAppid);
-        if (empty($total)) {
+        if(empty($total))
+        {
             $ret = array(
-                "status" => "1",
-                "total" => 0,
-                "page" => $page,
-                "pagesize" => $pagesize,
-                "data" => array(),
+                "status"=>"1",
+                "total"=>0,
+                "page"=>$page,
+                "pagesize"=>$pagesize,
+                "data"=>array(),
             );
             $ret = json_encode($ret);
             Result::output($ret);
             die;
         }
-        $allPage = ceil($total / $pagesize);
-        if ($page > $allPage) {
-            $page = $allPage;
+        $allPage = ceil($total/$pagesize);
+        if($page > $allPage)
+        {
+            $page = $allPage; 
         }
         $offset = ($page - 1) * $pagesize;
         $limit = $pagesize;
 
         $data = ServiceFactory::getService("Humidifier")->getActionLogList($tpMachineid, $tpAppid, $offset, $limit);
-        if ($data) {
+        if($data)
+        {
             $ret = array(
-                "status" => 1,
-                "total" => $total,
-                "page" => $page,
-                "pagesize" => $pagesize,
-                "data" => $data,
+                "status"=>1,
+                "total"=>$total,
+                "page"=>$page,
+                "pagesize"=>$pagesize,
+                "data"=>$data,
             );
             $ret = json_encode($ret);
             Result::output($ret);
             die;
-        } else {
+        }
+        else
+        {
             Result::showError("system error");
         }
-
+    
     }
 
     /**
      * @desc 保存使用记录
      */
-    public function actionlogAction()
+	public function actionlogAction() 
     {
         //这个是从电器维度的，是不知道appid的
         \Yaf_Dispatcher::getInstance()->disableView();
@@ -449,14 +487,16 @@ class HumidifierController extends MCommonController
         $energy = trim($_REQUEST['energy']);
 
         $energy = strtoupper($energy);
-        if (false !== strpos($energy, "KW")) {
-            $energy = str_replace("KW", "", $energy);
+        if(false !== strpos($energy, "KW"))
+        {
+            $energy = str_replace("KW", "", $energy); 
             $energy = floatval($energy);
             $energy = $energy * 1000;
             $energy = $energy . "W";
         }
 
-        if (empty($machineid)) {
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
         //fei 这个不能严格要求的，切记
@@ -467,50 +507,63 @@ class HumidifierController extends MCommonController
         }
         */
         $operation = intval($operation);
-        if (empty($starttime)) {
+        if(empty($starttime))
+        {
             //Result::showError("starttime is empty");
             Result::showOk("ok");
         }
-        if (empty($endtime)) {
+        if(empty($endtime))
+        {
             Result::showError("endtime is empty");
         }
-        if (empty($startlevel)) {
+        if(empty($startlevel))
+        {
             Result::showError("startlevel is empty");
         }
-        if (empty($endlevel)) {
+        if(empty($endlevel))
+        {
             Result::showError("endlevel is empty");
         }
-        if (empty($starthumidity)) {
+        if(empty($starthumidity))
+        {
             Result::showError("starthumidity is empty");
         }
-        if (empty($endhumidity)) {
+        if(empty($endhumidity))
+        {
             Result::showError("endhumidity is empty");
         }
-        if (empty($tophumidity)) {
+        if(empty($tophumidity))
+        {
             Result::showError("tophumidity is empty");
         }
-        if (empty($middlehumidity)) {
+        if(empty($middlehumidity))
+        {
             Result::showError("middlehumidity is empty");
         }
-        if (empty($bottomhumidity)) {
+        if(empty($bottomhumidity))
+        {
             Result::showError("bottomhumidity is empty");
         }
 
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg");
         }
 
         $tpAppid = 0;
-        if (!empty($appid)) {
+        if(!empty($appid))
+        {
             $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-            if (empty($tpAppid)) {
-                Result::showError("appid " . $appid . " have not reg");
+            if(empty($tpAppid))
+            {
+                Result::showError("appid ".$appid." have not reg");
             }
 
             $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-            if (!$flag) {
-                Result::showError("appid " . $appid . " have not bind machineid " . $machineid . "");
+            if(!$flag)
+            {
+                Result::showError("appid ".$appid." have not bind machineid ".$machineid."");
             }
         }
 
@@ -521,16 +574,22 @@ class HumidifierController extends MCommonController
         $realStartTime = 0;
 
         $costtime = $this->calcCostTime($starttime, $endtime, $realStartTime);
-        $humidity = "" . intval($bottomhumidity) . "%~" . intval($tophumidity) . "%";
+        $humidity = "".intval($bottomhumidity)."%~".intval($tophumidity)."%";
 
-        if (empty($appid)) {
-            $lastAppid = ServiceFactory::getService("Humidifier")->getLastAppid($tpMachineid);
-            if ("00000000-0000-0000-0000-000000000000" == $lastAppid) {
-                $operation = 0;
-            } else if ("11111111-0000-1111-1111-111111111111" == $lastAppid) {
+        if(empty($appid))
+        {
+            $lastAppid = ServiceFactory::getService("Humidifier")->getLastAppid($tpMachineid); 
+            if("00000000-0000-0000-0000-000000000000" == $lastAppid)
+            {
+                $operation = 0; 
+            }
+            else if("11111111-0000-1111-1111-111111111111" == $lastAppid)
+            {
                 //智能开 
                 $operation = 3;
-            } else if ("11111111-1111-1111-1111-000000000000" == $lastAppid) {
+            }
+            else if("11111111-1111-1111-1111-000000000000" == $lastAppid)
+            {
                 //预约开的
                 $operation = 2;
             }
@@ -538,10 +597,13 @@ class HumidifierController extends MCommonController
 
         //添加使用记录
         $ret = ServiceFactory::getService("Humidifier")->actionLog($tpMachineid, $machineid, $tpAppid, $appid, $operation, $realStartTime, $costtime, $humidity, $energy);
-        if ($ret) {
+        if($ret)
+        {
             //ServiceFactory::getService("HumidifierStat")->updateStat($tpMachineid);
             Result::showOk("ok");
-        } else {
+        }
+        else
+        {
             Result::showError("system error");
         }
     }
@@ -557,20 +619,24 @@ class HumidifierController extends MCommonController
         $level = trim($_REQUEST['level']);
         $state = trim($_REQUEST['state']);
 
-        if (empty($machineid)) {
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
-        if (empty($humidity)) {
+        if(empty($humidity))
+        {
             Result::showError("humidity is empty");
         }
-        if (empty($level)) {
+        if(empty($level))
+        {
             Result::showError("level is empty");
         }
         $state = intval($state);
 
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg");
         }
 
         ServiceFactory::getService("Machine")->active($tpMachineid);
@@ -591,9 +657,12 @@ class HumidifierController extends MCommonController
 
         //更新状态
         $ret = ServiceFactory::getService("Humidifier")->updateState($tpMachineid, $machineid, $humidity, $level, $state);
-        if ($ret) {
+        if($ret)
+        {
             Result::showOk("ok");
-        } else {
+        }
+        else
+        {
             Result::showError("system error");
         }
     }
@@ -606,38 +675,46 @@ class HumidifierController extends MCommonController
         \Yaf_Dispatcher::getInstance()->disableView();
         $machineid = trim($_REQUEST['machineid']);
         $appid = trim($_REQUEST['appid']);
-        if (empty($machineid)) {
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
-        if (empty($appid)) {
+        if(empty($appid))
+        {
             Result::showError("appid is empty");
         }
 
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg");
         }
         $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        if (empty($tpAppid)) {
-            Result::showError("appid " . $appid . " have not reg");
+        if(empty($tpAppid))
+        {
+            Result::showError("appid ".$appid." have not reg");
         }
 
         $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        if (!$flag) {
-            Result::showError("appid " . $appid . " have not bind machineid " . $machineid . "");
+        if(!$flag)
+        {
+            Result::showError("appid ".$appid." have not bind machineid ".$machineid."");
         }
 
         ServiceFactory::getService("App")->active($tpAppid);
 
         $data = ServiceFactory::getService("Humidifier")->getState($tpMachineid);
-        if ($data) {
+        if($data)
+        {
             $ret = array(
-                "status" => 1,
-                "data" => $data,
-            );
-            $ret = json_encode($ret);
+                "status"=>1,
+                "data"=>$data,
+            ); 
+            $ret = json_encode($ret); 
             Result::output($ret);
-        } else {
+        }
+        else
+        {
             Result::showError("system error");
         }
     }
@@ -650,34 +727,42 @@ class HumidifierController extends MCommonController
         \Yaf_Dispatcher::getInstance()->disableView();
         $appid = $_REQUEST['appid'];
         $machineid = $_REQUEST['machineid'];
-        if (empty($appid)) {
+        if(empty($appid))
+        {
             Result::showError("appid is empty");
         }
-        if (empty($machineid)) {
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
 
         $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        if (empty($tpAppid)) {
-            Result::showError("appid " . $appid . " have not reg");
+        if(empty($tpAppid))
+        {
+            Result::showError("appid ".$appid." have not reg"); 
         }
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg"); 
         }
 
         $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        if (!$flag) {
-            Result::showError("appid " . $appid . " have bind machineid " . $machineid . "");
+        if(!$flag)
+        {
+            Result::showError("appid ".$appid." have bind machineid ".$machineid."");
         }
 
         ServiceFactory::getService("App")->active($tpAppid);
 
         $data = ServiceFactory::getService("HumidifierStat")->getStat($tpMachineid);
-        if ($data) {
-            Result::showOk($data);
-        } else {
-            Result::showError("system error");
+        if($data)
+        {
+            Result::showOk($data); 
+        }
+        else
+        {
+            Result::showError("system error"); 
         }
     }
 
@@ -699,67 +784,83 @@ class HumidifierController extends MCommonController
         $noWaterRemind = $_REQUEST['nowaterremind'];
         $orderid = trim($_REQUEST['orderid']);
 
-        if (7 != strlen($week)) {
+        if(7 != strlen($week))
+        {
             Result::showError("week length must be 7 char");
         }
 
-        if (6 != strlen($heattime)) {
+        if(6 != strlen($heattime))
+        {
             Result::showError("heattime length must be 6 char, not support 0");
         }
 
         $action = strtolower($action);
-        if (!in_array($action, array("run", "stop"))) {
-            Result::showError("bad action '" . $action . "'");
+        if(!in_array($action, array("run", "stop")))
+        {
+            Result::showError("bad action '".$action."'");
         }
 
-        if (empty($anion)) {
-            $anion = 0;
-        } else {
+        if(empty($anion))
+        {
+            $anion = 0; 
+        }
+        else
+        {
             $anion = 1;
         }
 
-        if (empty($appid)) {
+        if(empty($appid))
+        {
             Result::showError("appid is empty");
         }
-        if (empty($machineid)) {
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
 
         $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        if (empty($tpAppid)) {
-            Result::showError("appid " . $appid . " have not reg");
+        if(empty($tpAppid))
+        {
+            Result::showError("appid ".$appid." have not reg"); 
         }
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg"); 
         }
 
         $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        if (!$flag) {
-            Result::showError("appid " . $appid . " have bind machineid " . $machineid . "");
+        if(!$flag)
+        {
+            Result::showError("appid ".$appid." have bind machineid ".$machineid."");
         }
 
         ServiceFactory::getService("App")->active($tpAppid);
 
         //fei 2014-11-15 orderid可以由app生成
-        if (empty($orderid)) {
+        if(empty($orderid))
+        {
             $orderid = ServiceFactory::getService("HumidifierOrder")->createOrderid($tpMachineid);
-            if (empty($orderid)) {
+            if(empty($orderid))
+            {
                 Result::showError("system error, createOrderId fail");
             }
         }
 
         $data = ServiceFactory::getService("HumidifierOrder")->add($tpMachineid, $machineid, $tpAppid, $appid, $orderid, $heattime, $week, $action, $grade, $startRemind, $endRemind, $noWaterRemind, $anion);
-        if ($data) {
+        if($data)
+        {
             $ret = array(
-                "status" => 1,
-                "data" => "ok",
-                "orderid" => $orderid,
+                "status"=>1,
+                "data"=>"ok",
+                "orderid"=>$orderid,
             );
             $ret = json_encode($ret);
             Result::output($ret);
-        } else {
-            Result::showError("system error");
+        }
+        else
+        {
+            Result::showError("system error"); 
         }
     }
 
@@ -773,38 +874,47 @@ class HumidifierController extends MCommonController
         $machineid = $_REQUEST['machineid'];
         $orderid = trim($_REQUEST['orderid']);
 
-        if (empty($appid)) {
+        if(empty($appid))
+        {
             Result::showError("appid is empty");
         }
-        if (empty($machineid)) {
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
 
         $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        if (empty($tpAppid)) {
-            Result::showError("appid " . $appid . " have not reg");
+        if(empty($tpAppid))
+        {
+            Result::showError("appid ".$appid." have not reg"); 
         }
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg"); 
         }
 
         $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        if (!$flag) {
-            Result::showError("appid " . $appid . " have bind machineid " . $machineid . "");
+        if(!$flag)
+        {
+            Result::showError("appid ".$appid." have bind machineid ".$machineid."");
         }
 
         ServiceFactory::getService("App")->active($tpAppid);
 
-        if (!ServiceFactory::getService("HumidifierOrder")->isExist($tpMachineid, $orderid)) {
-            Result::showError("order " . $orderid . " is not exist");
+        if(!ServiceFactory::getService("HumidifierOrder")->isExist($tpMachineid, $orderid))
+        {
+            Result::showError("order ".$orderid." is not exist");
         }
-
+   
         $data = ServiceFactory::getService("HumidifierOrder")->cancelOrder($tpMachineid, $tpAppid, $orderid);
-        if ($data) {
-            Result::showOk("ok");
-        } else {
-            Result::showError("system error");
+        if($data)
+        {
+            Result::showOk("ok"); 
+        }
+        else
+        {
+            Result::showError("system error"); 
         }
     }
 
@@ -818,34 +928,42 @@ class HumidifierController extends MCommonController
         $machineid = $_REQUEST['machineid'];
         $orderid = trim($_REQUEST['orderid']);
 
-        if (empty($appid)) {
+        if(empty($appid))
+        {
             Result::showError("appid is empty");
         }
-        if (empty($machineid)) {
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
 
         $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        if (empty($tpAppid)) {
-            Result::showError("appid " . $appid . " have not reg");
+        if(empty($tpAppid))
+        {
+            Result::showError("appid ".$appid." have not reg"); 
         }
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg"); 
         }
 
         $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        if (!$flag) {
-            Result::showError("appid " . $appid . " have bind machineid " . $machineid . "");
+        if(!$flag)
+        {
+            Result::showError("appid ".$appid." have bind machineid ".$machineid."");
         }
 
         ServiceFactory::getService("App")->active($tpAppid);
-
+   
         $data = ServiceFactory::getService("HumidifierOrder")->getDetail($tpMachineid, $orderid);
-        if ($data) {
-            Result::showOk($data);
-        } else {
-            Result::showError("system error");
+        if($data)
+        {
+            Result::showOk($data); 
+        }
+        else
+        {
+            Result::showError("system error"); 
         }
     }
 
@@ -862,74 +980,86 @@ class HumidifierController extends MCommonController
 
         $page = intval($page);
         $pageSize = intval($pageSize);
-        if ($page < 1) {
+        if($page < 1)
+        {
             $page = 1;
         }
-        if ($pageSize < 1) {
+        if($pageSize < 1)
+        {
             $pageSize = 10;
         }
 
         $total = 0;
 
-        if (empty($appid)) {
+        if(empty($appid))
+        {
             Result::showError("appid is empty");
         }
-        if (empty($machineid)) {
+        if(empty($machineid))
+        {
             Result::showError("machineid is empty");
         }
 
         $tpAppid = ServiceFactory::getService("App")->getTpAppid($appid);
-        if (empty($tpAppid)) {
-            Result::showError("appid " . $appid . " have not reg");
+        if(empty($tpAppid))
+        {
+            Result::showError("appid ".$appid." have not reg"); 
         }
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            Result::showError("machineid " . $machineid . " have not reg");
+        if(empty($tpMachineid))
+        {
+            Result::showError("machineid ".$machineid." have not reg"); 
         }
 
         $flag = ServiceFactory::getService("App")->isBind($tpAppid, $tpMachineid);
-        if (!$flag) {
-            Result::showError("appid " . $appid . " have bind machineid " . $machineid . "");
+        if(!$flag)
+        {
+            Result::showError("appid ".$appid." have bind machineid ".$machineid."");
         }
 
         ServiceFactory::getService("App")->active($tpAppid);
 
         $total = ServiceFactory::getService("HumidifierOrder")->getOrderNum($tpMachineid, $tpAppid);
-        if (empty($total)) {
+        if(empty($total))
+        {
             $ret = array(
-                "status" => 1,
-                "page" => $page,
-                "pagesize" => $pageSize,
-                "total" => 0,
-                "data" => array(),
+                "status"=>1,
+                "page"=>$page,
+                "pagesize"=>$pageSize,
+                "total"=>0,
+                "data"=>array(),
             );
             $ret = json_encode($ret);
             Result::output($ret);
             die;
         }
 
-        $allPage = ceil($total / $pageSize);
-        if ($page > $allPage) {
+        $allPage = ceil($total/$pageSize);
+        if($page > $allPage)
+        {
             $page = $allPage;
         }
 
-        $offset = ($page - 1) * $pageSize;
+        $offset = ($page - 1)*$pageSize;
         $limit = $pageSize;
-
+   
         $data = ServiceFactory::getService("HumidifierOrder")->getOrderList($tpMachineid, $tpAppid, $offset, $limit);
-        if ($data) {
+        if($data)
+        {
             $ret = array(
-                "status" => 1,
-                "page" => $page,
-                "pagesize" => $pageSize,
-                "total" => $total,
-                "data" => $data,
+                "status"=>1,
+                "page"=>$page,
+                "pagesize"=>$pageSize,
+                "total"=>$total,
+                "data"=>$data,
             );
             $ret = json_encode($ret);
             Result::output($ret);
             die;
-        } else {
-            Result::showError("system error");
+        }
+        else
+        {
+            Result::showError("system error"); 
         }
     }
 
@@ -937,24 +1067,25 @@ class HumidifierController extends MCommonController
     {
 
         $ymd = date("Y-m-d");
+        
+        $startHour = intval(substr($startTime, 0, 2)); 
+        $startMin = intval(substr($startTime, 2, 2)); 
+        $startSec = intval(substr($startTime, 4, 2)); 
 
-        $startHour = intval(substr($startTime, 0, 2));
-        $startMin = intval(substr($startTime, 2, 2));
-        $startSec = intval(substr($startTime, 4, 2));
+        $endHour = intval(substr($endTime, 0, 2)); 
+        $endMin = intval(substr($endTime, 2, 2)); 
+        $endSec = intval(substr($endTime, 4, 2)); 
 
-        $endHour = intval(substr($endTime, 0, 2));
-        $endMin = intval(substr($endTime, 2, 2));
-        $endSec = intval(substr($endTime, 4, 2));
-
-        $start = strtotime($ymd . " " . $startHour . ":" . $startMin . ":" . $startSec . "");
-        $end = strtotime($ymd . " " . $endHour . ":" . $endMin . ":" . $endSec . "");
+        $start = strtotime($ymd." ".$startHour.":".$startMin.":".$startSec."");
+        $end = strtotime($ymd." ".$endHour.":".$endMin.":".$endSec."");
 
         $realStartTime = $start;
 
         $ret = $end - $start;
 
-        if ($ret < 0) {
-            $ret += 86400;
+        if($ret < 0)
+        {
+            $ret += 86400; 
         }
         return $ret;
     }

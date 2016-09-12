@@ -161,8 +161,10 @@ class Umeng
             // Set your alias_type here
             $customizedcast->setPredefinedKeyValue("alias_type", "appid");
             $customizedcast->setPredefinedKeyValue("ticker", "温馨提示");
-            $customizedcast->setPredefinedKeyValue("title", $title);
-            $customizedcast->setPredefinedKeyValue("text", $content);
+            if (!$title) {
+                $customizedcast->setPredefinedKeyValue("title", " ");
+                $customizedcast->setPredefinedKeyValue("text", " ");
+            }
             if ($sound) {
                 //$customizedcast->setPredefinedKeyValue("play_sound",   "true");
             } else {
@@ -303,7 +305,7 @@ class Umeng
         }
     }
 
-    function sendIOSCustomizedcast($appid, $title, $content, $sound = true, $shock = true, $device_token = null)
+    function sendIOSCustomizedcast($appid, $title, $content, $sound = true, $shock = true, $device_token = null, $request = null)
     {
         //echo "into sendIOSCustomizedcast appid=" . $appid . ", title=" . $title . "\n";
         $ret = false;
@@ -343,6 +345,9 @@ class Umeng
             // Set 'production_mode' to 'true' if your app is under production mode
             $customizedcast->setPredefinedKeyValue("production_mode", "false");
             print("Sending customizedcast notification, please wait...\r\n");
+            if ($request) {
+                $customizedcast->setCustomizedField("request", $request);
+            }
             $customizedcast->send();
             print("Sent SUCCESS\r\n");
             $ret = true;

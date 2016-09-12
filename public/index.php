@@ -6,7 +6,10 @@ define("APP_PATH",  dirname(dirname(__FILE__)));
 require dirname(__DIR__) . '/vendor/autoload.php';
 $autoload = new Composer\Autoload\ClassLoader();
 $autoload->register(true);
-$autoload->addClassMap(['MCommonController' => APP_PATH . '/application/controllers/MCommonController.php']);
+$autoload->addClassMap([
+    'MCommonController' => APP_PATH . '/application/controllers/MCommonController.php',
+    'Umeng' => APP_PATH . '/library/umeng/Umeng.php'
+]);
 $autoload->addPsr4('vendor\\', APP_PATH . '/vendor');
 // composer autoload end
 

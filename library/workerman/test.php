@@ -58,7 +58,7 @@ $worker->onMessage = function ($connection, $data) use ($worker) {
         $return = json_encode($arr);
         $return = str_replace("\\", '', $return);
         $in = "HTTP/1.1 200 OK\r\n";
-        $in .= "Date:" . date("D, d M Y H:i:s T", time()) . "\r\n";
+        $in .= "Date:" . gmdate("D, d M Y H:i:s T", time()) . "\r\n";
         $in .= "Content-Length:" . strlen($return) . "\r\n\r\n";
         $in .= $return;
         return $connection->send($in);

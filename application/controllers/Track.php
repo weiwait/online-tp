@@ -39,6 +39,11 @@ class TrackController extends MCommonController
     public function registerAction()
     {
         $phone = $this->getValue('phone');
+        if (preg_match('/^((13)|(15)|(17)|(18)){1}\d{9}$/', $phone) != 1) {
+            $msg = ['status' => 0, 'message' => 'the phone is incorrectness'];
+            echo json_encode($msg);
+            return;
+        }
         $sql = "select phone from user where phone = '{$phone}' limit 1";
         $result = DaoFactory::getDao('track')->query($sql);
         if (!count($result) == 0) {
@@ -53,8 +58,8 @@ class TrackController extends MCommonController
             return;
         }
         $password = $this->getValue('password');
-        if (empty($password)) {
-            $msg = ['status' => 0, 'message' => 'the password can not bu empty'];
+        if (preg_match('/^[\w_]{9,25}$/', $password) != 1) {
+            $msg = ['status' => 0, 'message' => 'the password is incorrectness'];
             echo json_encode($msg);
             return;
         } else {
@@ -112,10 +117,12 @@ class TrackController extends MCommonController
         $data['username'] = $username;
         $data['password'] = md5($password);
         $res = $this->loginVerify($data);
-        $sole = $res['appId'] == $appId? true: false;
-        if (!false == $res && $sole == true) {
+        if (!false == $res) {
             $_SESSION['user_id'] = $res['id'];
-            $msg = ['status' => 1, 'id' => $res['id'], 'name' => $res['name']];
+            $_SESSION['user_name'] = $res['name'];
+            $_SESSION['user_appId'] = $res['appId'];
+            $this->updateOne('user', 'appId', 'id', $res['id'], $appId, 'string');
+            $msg = ['status' => 1, 'id' => $res['id'], 'name' => $res['name'], 'portrait' => $res['portrait']];
         } else {
             $msg = ['status' => 0];
         }
@@ -151,14 +158,23 @@ class TrackController extends MCommonController
             return;
         }
         $friend = $this->getValue('id');
+        if ($friend == $id) {
+            $msg = ['status' => 0, 'message' => 'request be defeated'];
+            echo json_encode($msg);
+            return;
+        }
         $user = $this->getuser('id', $friend);
         $appId = $user['appId'];
-        $content = "{$friend}:{$user['name']}:ref";
+        $content = "{$friend}:{$user['name']}";
         $result = $this->friendStand($id, $friend, 'request');
+        ob_start();
         switch ($result) {
-            case true:
-                $this->umeng->send($appId, '', $content);
-                $msg = ['status' => 1, 'message' => 'requested'];
+            case 11:
+//                $this->umeng->send($appId, '', $content);
+
+                $Umeng = new \Umeng('57c3fc82e0f55a60930001ab', 'vibln1ndpibkxa0mpor4s2datlkbgtm4');
+                $status = $Umeng->sendIOSCustomizedcast($appId, "好友请求", $content, true, true, null, $content);
+                $msg = ['status' => 1, 'message' => 'requested', 'umeng' => $status];
                 break;
             case 1:
                 $msg = ['status' => 2, 'message' => 'is already a friend'];
@@ -166,10 +182,15 @@ class TrackController extends MCommonController
             case 2:
                 $msg = ['status' => 3, 'message' => 'has been refused'];
                 break;
+            case 0:
+                $msg = ['status' => 0, 'message' => 'request be defeated'];
+                break;
             default:
                 $msg = ['status' => 0, 'message' => 'request be defeated'];
         }
+        ob_get_clean();
         echo json_encode($msg);
+        ob_end_flush();
     }
 
     private function friendStand($userid, $friendid, $action)
@@ -178,18 +199,18 @@ class TrackController extends MCommonController
             case 'request':
                 $status = $this->friendStatus($userid, $friendid);
                 if ($status == false) {
-                    $sql = 'INSERT INTO `friend` (first, second, status) VALUES (?, ?, ?)';
+                    $sql = 'INSERT INTO `friend` (`first`, `second`, status) VALUES (?, ?, ?)';
                     $pdoStatement = $this->pdo->prepare($sql);
                     $pdoStatement->bindValue(1, $userid, PDO::PARAM_INT);
                     $pdoStatement->bindValue(2, $friendid, PDO::PARAM_INT);
                     $pdoStatement->bindValue(3, 0, PDO::PARAM_INT);
                     $pdoStatement->execute();
                     $data = $this->pdo->lastInsertId();
-                    return $data > 0 ? true : false;
+                    return $data > 0 ? 11 : 0;
                 } else {
                     switch ($status['status']) {
                         case 0:
-                            return true;
+                            return 0;
                             break;
                         case 1:
                             return 1;
@@ -211,14 +232,26 @@ class TrackController extends MCommonController
                 $pdoStatement->execute();
                 $result1 = $pdoStatement->rowCount();
                 $result1 = $result1 == 1 ? true : false;
-                $sql = 'INSERT INTO `friend` (first, second, status) VALUES (?,?,?)';
-                $pdoStatement = $this->pdo->prepare($sql);
-                $pdoStatement->bindValue(1, $friendid, PDO::PARAM_INT);
-                $pdoStatement->bindValue(2, $userid, PDO::PARAM_INT);
-                $pdoStatement->bindValue(3, 1, PDO::PARAM_INT);
-                $pdoStatement->execute();
-                $result2 = $this->pdo->lastInsertId();
-                $result2 = $result2 > 0 ? true : false;
+                $status = $this->friendStatus($friendid, $userid);
+                if ($status == false) {
+                    $sql = 'INSERT INTO `friend` (first, second, status) VALUES (?,?,?)';
+                    $pdoStatement = $this->pdo->prepare($sql);
+                    $pdoStatement->bindValue(1, $friendid, PDO::PARAM_INT);
+                    $pdoStatement->bindValue(2, $userid, PDO::PARAM_INT);
+                    $pdoStatement->bindValue(3, 1, PDO::PARAM_INT);
+                    $pdoStatement->execute();
+                    $result2 = $this->pdo->lastInsertId();
+                    $result2 = $result2 > 0 ? true : false;
+                } else {
+                    $sql = 'UPDATE `friend` SET `status` = ? WHERE `first` = ? AND `second` = ?';
+                    $pdoStatement = $this->pdo->prepare($sql);
+                    $pdoStatement->bindValue(1, 1, PDO::PARAM_INT);
+                    $pdoStatement->bindValue(2, $friendid, PDO::PARAM_INT);
+                    $pdoStatement->bindValue(3, $userid, PDO::PARAM_INT);
+                    $pdoStatement->execute();
+                    $result2 = $pdoStatement->rowCount();
+                    $result2 = $result2 == 1 ? true : false;
+                }
                 if ($result1 && $result2) {
                     $this->pdo->commit();
                     $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
@@ -240,13 +273,30 @@ class TrackController extends MCommonController
                 return $result;
                 break;
             case 'delete':
+                $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
+                $this->pdo->beginTransaction();
                 $sql = 'DELETE FROM `friend` WHERE `first` = ? AND `second` = ?';
                 $pdoStatement = $this->pdo->prepare($sql);
                 $pdoStatement->bindValue(1, $userid, PDO::PARAM_INT);
                 $pdoStatement->bindValue(2, $friendid, PDO::PARAM_INT);
                 $pdoStatement->execute();
                 $result = $pdoStatement->rowCount();
-                return $result == 1 ? true : false;
+                $result = $result == 1 ? true : false;
+                $sql = 'DELETE FROM `friend` WHERE `first` = ? AND `second` = ?';
+                $pdoStatement = $this->pdo->prepare($sql);
+                $pdoStatement->bindValue(1, $friendid, PDO::PARAM_INT);
+                $pdoStatement->bindValue(2, $userid, PDO::PARAM_INT);
+                $pdoStatement->execute();
+                $result2 = $pdoStatement->rowCount();
+                $result2 = $result2 == 1 ? true : false;
+                if ($result && $result2) {
+                    $this->pdo->commit();
+                    $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+                    return true;
+                }
+                $this->pdo->rollBack();
+                $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+                return false;
                 break;
         }
     }
@@ -271,17 +321,32 @@ class TrackController extends MCommonController
             return;
         }
         $agreeid = $this->getValue('id');
+        $frienStatus = $this->friendStatus($agreeid, $id);
+        if ($frienStatus == false) {
+            $msg = ['status' => 0, 'message' => 'operation defeated'];
+            echo json_encode($msg);
+            return;
+        }
+        if ($frienStatus['status'] == 1) {
+            $msg = ['status' => 0, 'message' => 'operation defeated'];
+            echo json_encode($msg);
+            return;
+        }
         $user = $this->getuser('id', $agreeid);
         $appId = $user['appId'];
-        $content = "{$agreeid}:{$user['name']}:agf";
+        $content = "{$id}:{$_SESSION['user_name']}";
         $result = $this->friendStand($agreeid, $id, 'agree');
+        ob_start();
         if ($result) {
-            $this->umeng->send($appId, '', $content);
-            $msg = ['status' => 1, 'message' => 'agree become friends'];
+            $Umeng = new \Umeng('57c3fc82e0f55a60930001ab', 'vibln1ndpibkxa0mpor4s2datlkbgtm4');
+            $status = $Umeng->sendIOSCustomizedcast($appId, "yes", $content);
+            $msg = ['status' => 1, 'message' => 'agree become friends', 'umeng' => $status];
         } else {
             $msg = ['status' => 0, 'message' => 'operation defeated'];
         }
+        ob_get_clean();
         echo json_encode($msg);
+        ob_end_flush();
     }
 
     public function refusedAction()
@@ -313,28 +378,28 @@ class TrackController extends MCommonController
         $friendid = $this->getValue('id');
         $result = $this->friendStand($id, $friendid, 'delete');
         if ($result) {
-            $msg = ['status' => 1, 'message' => 'delete a friend successfuly'];
+            $msg = ['status' => 1, 'message' => 'delete a friend successfully'];
         } else {
             $msg = ['status' => 0, 'message' => 'operation defeated'];
         }
         echo json_encode($msg);
     }
 
-    public function searchUser()
+    public function searchuserAction()
     {
         $phone = $this->getValue('phone');
         $result = $this->getuser('phone', $phone);
         if ($result == false) {
             $msg = ['status' => 0, 'message' => 'the user not found'];
         } else {
-            $msg = ['status' => 1, 'id' => $result['id'], 'username' => $result['name']];
+            $msg = ['status' => 1, 'id' => $result['id'], 'name' => $result['name']];
         }
         echo json_encode($msg);
     }
 
     private function getuser($where, $value)
     {
-        $sql = "SELECT `id`, `name` FROM `user` WHERE {$where} = ? LIMIT 1";
+        $sql = "SELECT `id`, `name`, `appId` FROM `user` WHERE {$where} = ? LIMIT 1";
         $pdoStatement = $this->pdo->prepare($sql);
         $pdoStatement->bindValue(1, $value, PDO::PARAM_STR);
         $pdoStatement->execute();
@@ -397,7 +462,7 @@ class TrackController extends MCommonController
     private function upload()
     {
         $up = new Upload();
-        $path = "./portrait/images/";
+        $path = "./portrait";
         $up -> set("path", $path);
         $up -> set("maxsize", 2000000);
         $up -> set("allowtype", array("gif", "png", "jpg","jpeg"));
