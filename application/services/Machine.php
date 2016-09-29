@@ -566,5 +566,17 @@ class Machine extends MCommonService
             return $data[0];
         }
     }
+
+    // 多考勤机更新同一记录，获取主机的tpMachineId
+    public function getMachineGroupMaster($member)
+    {
+        $sql = "SELECT `master` FROM `machine_group` WHERE `master` = {$member} OR `auxilliary` = {$member} LIMIT 1";
+        $data = DaoFactory::getDao('Main')->query($sql);
+        if ($data) {
+            return $data[0]['master'];
+        }
+        return null;
+    }
+
 }
 

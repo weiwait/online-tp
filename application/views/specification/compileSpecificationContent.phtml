@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<img src="/specification/<?php echo $data['image']; ?>" alt="">
+<form action="" method="post" enctype="multipart/form-data">
+    <label for=""><input type="hidden" name="id" value="<?php echo $data['id']; ?>"></label>
+    <label for=""><input type="file" name="image"></label>
+    <label for="">lang:<input type="text" name="lang" placeholder="<?php echo $data['lang']; ?>"></label>
+    <label for="">sort:<input type="text" name="sort" placeholder="<?php echo $data['sort']; ?>"></label>
+    <label for=""><input type="submit" value="修改"></label>
+</form>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<table border="1px">
+    <tr>
+        <td>--specificationName--</td>
+        <td>--sort--</td>
+        <td>--action--</td>
+        <td>--action--</td>
+    </tr>
+    <?php foreach ($data as $item) { ?>
+    <tr>
+        <td><?php echo $item{'specification_name'} ?></td>
+        <td><?php echo $item{'sort'} ?></td>
+        <td><a href="/specification/compileSpecification/d/0/id/<?php echo $item['id'] ?>">compile</a></td>
+        <td><a href="/specification/compileSpecification/d/1/id/<?php echo $item['id'] ?>">delete</a></td>
+    </tr>
+    <?php } ?>
+</table>
+</body>
+</html>

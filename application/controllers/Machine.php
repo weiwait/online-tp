@@ -50,6 +50,11 @@ class MachineController extends MCommonController
         $labelid = $machineid_arr[1];
 
         $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
+
+
+        // 更换到主考勤机
+        $tpMachineid = ServiceFactory::getService("Machine")->getMachineGroupMaster($tpMachineid);
+
         if (empty($tpMachineid)) {
             Result::showError("machineid " . $machineid . " have not reg");
         }
@@ -84,6 +89,7 @@ class MachineController extends MCommonController
         if (empty($last_label)) {
             $res = $this->insertNewLable($tpLabelid, $tpMachineid, $ip, $longitude, $latitude);
             if ($res) {
+                ServiceFactory::getService("Attendance")->insertPunch($tpLabelid, $tpMachineid, $ip, $longitude, $latitude, 5, '0', time());
                 $ret = array(
                     "status" => 1,
                     "data" => "ok"
@@ -99,8 +105,13 @@ class MachineController extends MCommonController
         }
 
         $time_dirr = time() - $last_label['leave_time'];
-        if ($time_dirr <= 420) { //和上一次离开时间间隔小于等于6分钟，，更新记录
+        if ($time_dirr <= 600) { //和上一次离开时间间隔小于等于6分钟，，更新记录
             $res = $this->updateNewLabel($tpLabelid, $tpMachineid, $ip, $last_label['id'], $longitude, $latitude);
+
+            $data = ServiceFactory::getService("Attendance")->getPunchLast($tpLabelid, $tpMachineid);
+            $punch_id = $data[0]['id'];
+            ServiceFactory::getService("Attendance")->updatePunch($tpLabelid, $punch_id, $ip, 5, '0', time());
+
             if ($res) {
                 $ret = array(
                     "status" => 1,
@@ -117,6 +128,7 @@ class MachineController extends MCommonController
         } else { //和上一次离开时间间隔大于6分钟，插入记录
             $res = $this->insertNewLable($tpLabelid, $tpMachineid, $ip, $longitude, $latitude);
             if ($res) {
+                ServiceFactory::getService("Attendance")->insertPunch($tpLabelid, $tpMachineid, $ip, $longitude, $latitude, 5, '0', time());
                 $ret = array(
                     "status" => 1,
                     "data" => "ok"
@@ -145,7 +157,7 @@ class MachineController extends MCommonController
      */
     private function updateNewLabel($tpLabelid, $tpMachineid, $ip, $lastLabelId, $longitude, $latitude)
     {
-        ServiceFactory::getService("Attendance")->pushLabelNotification($tpLabelid);
+//        ServiceFactory::getService("Attendance")->pushLabelNotification($tpLabelid);
         return ServiceFactory::getService("Attendance")->updateLabel($tpLabelid, $tpMachineid, $ip, $lastLabelId, $longitude, $latitude);
     }
 
@@ -161,7 +173,7 @@ class MachineController extends MCommonController
      */
     private function insertNewLable($tpLabelid, $tpMachineid, $ip, $longitude, $latitude)
     {
-        ServiceFactory::getService("Attendance")->pushLabelNotification($tpLabelid);
+//        ServiceFactory::getService("Attendance")->pushLabelNotification($tpLabelid);
         return ServiceFactory::getService("Attendance")->insertLabel($tpLabelid, $tpMachineid, $ip, $longitude, $latitude);
     }
 

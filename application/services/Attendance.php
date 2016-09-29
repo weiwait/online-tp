@@ -189,6 +189,9 @@ class Attendance extends Service
     public function getPunchMonth($tpAppid, $tpMachineid, $time)
     {
         $time = strtotime($time);
+        $data = $this->getMatchingLabelId($tpAppid);
+        $tpAppid = $data['tp_labelid'];
+        $tpMachineid = $data['tp_machineid'];
         $sql = "select * from attendance_punch where tp_appid='" . $tpAppid . "' and tp_machineid='" . $tpMachineid . "' and FROM_UNIXTIME(createtime,'%m')=FROM_UNIXTIME($time,'%m') order by createtime asc";
         DaoFactory::getDao("Shard")->branchDb($tpAppid);
         $data = DaoFactory::getDao("Shard")->query($sql);
@@ -203,6 +206,9 @@ class Attendance extends Service
     public function getPunchDay($tpAppid, $tpMachineid, $time)
     {
         $time = strtotime($time);
+        $data = $this->getMatchingLabelId($tpAppid);
+        $tpAppid = $data['tp_labelid'];
+        $tpMachineid = $data['tp_machineid'];
         $sql = "select * from attendance_punch where tp_appid='" . $tpAppid . "' and tp_machineid='" . $tpMachineid . "' and FROM_UNIXTIME(createtime,'%Y%m%d')=FROM_UNIXTIME($time,'%Y%m%d') order by createtime asc";
         DaoFactory::getDao("Shard")->branchDb($tpAppid);
         $data = DaoFactory::getDao("Shard")->query($sql);
@@ -210,8 +216,15 @@ class Attendance extends Service
         if ($data) {
             return $data;
         } else {
-            return '';
+            return 'hello';
         }
+    }
+
+    private function getMatchingLabelId($tpAppId)
+    {
+        $sql = "select `tp_labelid`, `tp_machineid` from `bind_label` where `tp_appid` = {$tpAppId}";
+        $data = DaoFactory::getDao('Main')->query($sql);
+        return $data[0];
     }
 
     public function getCheckInMonth($tpAppid, $tpMachineid, $time)
@@ -344,7 +357,7 @@ class Attendance extends Service
 
     public function updatePunch($tpAppid, $punch_id, $app_ip, $type, $distance, $time)
     {
-        $sql = "update attendance_punch set last_active_time='" . ($time ? $time : time()) . "',last_active_ip='" . $app_ip . "',last_active_type='" . $type . "',last_active_distance='" . $distance . "' where id='" . $punch_id . "' limit 1";
+        $sql = "update attendance_punch set last_active_time='" . ($time ? $time : time()) . "',last_active_ip='" . $app_ip . "',last_active_type='" . $type . "',last_active_distance='" . $distance . "' where id= {$punch_id}";
         DaoFactory::getDao("Shard")->branchDb($tpAppid);
         $data = DaoFactory::getDao("Shard")->query($sql);
         if ($data) {
@@ -791,7 +804,7 @@ class Attendance extends Service
     //更新标签数据
     public function updateLabel($tpLabelid, $tpMachineid, $ip, $id, $longitude, $latitude)
     {
-        $sql = "update attendance_punch_label set leave_time='" . time() . "', leave_ip='" . $ip . "', leave_longitude='" . $longitude . "', leave_ip='" . $ip . "' where id='" . $id . "' limit 1";
+        $sql = "update attendance_punch_label set leave_time = unix_timestamp(), leave_ip= '{$ip}', leave_longitude = '{$longitude}', `leave_latitude` = '{$latitude}' where id = {$id} limit 1";
         DaoFactory::getDao("Shard")->branchDb($tpLabelid);
         $res = DaoFactory::getDao("Shard")->query($sql);
         return $res;
@@ -870,5 +883,11 @@ class Attendance extends Service
         $secs = $remain % 60;
         $res = array("day" => $days, "hour" => $hours, "min" => $mins, "sec" => $secs);
         return $res;
+    }
+
+    public function getColleague($parentId)
+    {
+        $sql = "SELECT `username`, `phonenumber`, `email`, `headurl` FROM `app` WHERE `parent_id` = {$parentId}";
+        return DaoFactory::getDao('Main')->query($sql);
     }
 }

@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2016-09-02
- * Time: 14:43
- */
+
 
 use base\DaoFactory;
 use base\ServiceFactory;
@@ -14,14 +9,18 @@ class TrackController extends MCommonController
 {
     /** @var $pdo \PDO */
     private $pdo;
+    /** @var $mainPdo \PDO */
+    private $mainPdo;
     /** @var $umeng services\UmengSend */
     private $umeng;
 
     public function init()
     {
+        header('Content-Type: text/json');
         parent::init();
         parent::disableView();
         $this->pdo = ServiceFactory::getService('MysqlPdo')->getPdo('track');
+        $this->mainPdo = ServiceFactory::getService('MysqlPdo')->getPdo('main');
         $this->umeng = ServiceFactory::getService('UmengSend');
     }
 
@@ -111,18 +110,20 @@ class TrackController extends MCommonController
 
     public function loginAction()
     {
-        $username = $this->getValue('name');
+        $phone = $this->getValue('phone');
         $password = $this->getValue('password');
         $appId = $this->getValue('appId');
-        $data['username'] = $username;
+        $data['phone'] = $phone;
         $data['password'] = md5($password);
         $res = $this->loginVerify($data);
         if (!false == $res) {
             $_SESSION['user_id'] = $res['id'];
             $_SESSION['user_name'] = $res['name'];
             $_SESSION['user_appId'] = $res['appId'];
-            $this->updateOne('user', 'appId', 'id', $res['id'], $appId, 'string');
-            $msg = ['status' => 1, 'id' => $res['id'], 'name' => $res['name'], 'portrait' => $res['portrait']];
+            if (!empty($appId)) {
+                $this->updateOne('user', 'appId', 'id', $res['id'], $appId, 'string');
+            }
+            $msg = ['status' => 1, 'id' => $res['id'], 'name' => $res['name'], 'phone' => $res['phone'], 'portrait' => $res['portrait']];
         } else {
             $msg = ['status' => 0];
         }
@@ -131,9 +132,9 @@ class TrackController extends MCommonController
 
     private function loginVerify($data)
     {
-        $sql = 'SELECT * FROM `user` WHERE `name` = ? AND `password` = ? LIMIT 1';
+        $sql = 'SELECT * FROM `user` WHERE `phone` = ? AND `password` = ? LIMIT 1';
         $pdoStatement = $this->pdo->prepare($sql);
-        $pdoStatement->bindValue(1, $data['username'], PDO::PARAM_STR);
+        $pdoStatement->bindValue(1, $data['phone'], PDO::PARAM_STR);
         $pdoStatement->bindValue(2, $data['password'], PDO::PARAM_STR);
         $pdoStatement->execute();
         $result = $pdoStatement->fetch(PDO::FETCH_ASSOC);
@@ -147,6 +148,7 @@ class TrackController extends MCommonController
         $pdoStatement = $this->pdo->prepare($sql);
         $pdoStatement->bindValue(1, $value, $type);
         $pdoStatement->execute();
+        return $pdoStatement->rowCount();
     }
 
     public function requestAction()
@@ -172,9 +174,6 @@ class TrackController extends MCommonController
         ob_start();
         switch ($result) {
             case 11:
-//                $this->umeng->send($appId, '', $content);
-
-//                $Umeng = new \Umeng('57c3fc82e0f55a60930001ab', 'vibln1ndpibkxa0mpor4s2datlkbgtm4');
                 $status = $this->umeng->send($appId, 'track', $notification, true, true, $content);
                 $msg = ['status' => 1, 'message' => 'requested', 'umeng' => $status];
                 break;
@@ -264,11 +263,11 @@ class TrackController extends MCommonController
                 return false;
                 break;
             case 'refused':
-                $sql = 'UPDATE `friend` SET `status` = ? WHERE `first` = ? AND `second` = ?';
+//                $sql = 'UPDATE `friend` SET `status` = ? WHERE `first` = ? AND `second` = ?';
+                $sql = 'DELETE FROM `friend` WHERE `first` = ? AND `second` = ?';
                 $pdoStatement = $this->pdo->prepare($sql);
-                $pdoStatement->bindValue(1, 2, PDO::PARAM_INT);
-                $pdoStatement->bindValue(2, $userid, PDO::PARAM_INT);
-                $pdoStatement->bindValue(3, $friendid, PDO::PARAM_INT);
+                $pdoStatement->bindValue(1, $userid, PDO::PARAM_INT);
+                $pdoStatement->bindValue(2, $friendid, PDO::PARAM_INT);
                 $pdoStatement->execute();
                 $result = $pdoStatement->rowCount();
                 $result = $result == 1 ? true : false;
@@ -361,13 +360,17 @@ class TrackController extends MCommonController
             return;
         }
         $friendid = $this->getValue('id');
+        $user = $this->getuser('id', $friendid);
         $result = $this->friendStand($friendid, $id, 'refused');
         if ($result) {
-            $msg = ['status' => 1, 'message' => 'has refuse'];
+            $status = $this->umeng->send($user['appId'], 'track', $_SESSION['user_name'] . '拒绝了您的好友请求', true, true);
+            $msg = ['status' => 1, 'message' => 'has refuse', 'umeng' => $status];
         } else {
             $msg = ['status' => 0, 'message' => 'operation defeated'];
         }
+        ob_get_clean();
         echo json_encode($msg);
+        ob_end_flush();
     }
 
     public function friendDeleteAction()
@@ -379,13 +382,19 @@ class TrackController extends MCommonController
             return;
         }
         $friendid = $this->getValue('id');
+        $user = $this->getuser('id', $friendid);
+        $appId = $user['appId'];
+        $content = ['delete' => $friendid];
         $result = $this->friendStand($id, $friendid, 'delete');
         if ($result) {
-            $msg = ['status' => 1, 'message' => 'delete a friend successfully'];
+            $status = $this->umeng->send($appId, 'track', $user['name'] . '与您解除好友关系', true, true, $content);
+            $msg = ['status' => 1, 'message' => 'delete a friend successfully', 'umeng' => $status];
         } else {
             $msg = ['status' => 0, 'message' => 'operation defeated'];
         }
+        ob_get_clean();
         echo json_encode($msg);
+        ob_end_flush();
     }
 
     public function searchuserAction()
@@ -445,14 +454,52 @@ class TrackController extends MCommonController
             return;
         }
         $users = $this->allrequest($id);
-        echo json_encode($users);
+        $positions = $this->allGetMePosition($id);
+        $message = array_merge($users, $positions);
+        echo json_encode($message);
+    }
+
+    private function allGetMePosition($id)
+    {
+        $sql = 'SELECT * FROM `position_msg` WHERE `user_id` = ? AND `title` = ? AND `isdelete` = ? AND `other_id` > ?';
+        $pdoStatement = $this->mainPdo->prepare($sql);
+        $pdoStatement->bindValue(1, $id, PDO::PARAM_INT);
+        $pdoStatement->bindValue(2, 'RESPONSEP', PDO::PARAM_STR);
+        $pdoStatement->bindValue(3, 0, PDO::PARAM_INT);
+        $pdoStatement->bindValue(4, 0, PDO::PARAM_INT);
+        $pdoStatement->execute();
+        $result = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+        $data = [];
+        foreach ($result as $value) {
+            $name = $this->getuser('id', $value['other_id'])['name'];
+            $data[] = ['name' =>$name, 'time' => $value['createtime']];
+        }
+        return $data;
+    }
+
+    public function deleteHistoryAction()
+    {
+        $id = $this->getValue('id');
+        $sql = 'UPDATE `position_msg` SET `isdelete` = ? WHERE `id` = ?';
+        $pdoStatement = $this->mainPdo->prepare($sql);
+        $pdoStatement->bindValue(1, 1, PDO::PARAM_INT);
+        $pdoStatement->bindValue(2, $id, PDO::PARAM_INT);
+        $pdoStatement->execute();
+        $result = $pdoStatement->rowCount();
+        if ($result == 1) {
+            $msg = ['status' => 1];
+        } else {
+            $msg = ['status' => 0];
+        }
+        echo json_encode($msg);
     }
 
     private function allrequest($id)
     {
-        $sql = 'SELECT `first` FROM `friend` WHERE `second` = ? AND `status` = 0';
+        $sql = 'SELECT `first` FROM `friend` WHERE `second` = ? AND `status` = ?';
         $pdoStatement = $this->pdo->prepare($sql);
         $pdoStatement->bindValue(1, $id, PDO::PARAM_INT);
+        $pdoStatement->bindValue(2, 0, PDO::PARAM_INT);
         $pdoStatement->execute();
         $data = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
         $user = [];
@@ -488,4 +535,80 @@ class TrackController extends MCommonController
         echo json_encode($msg);
     }
 
+    public function modificationAction()
+    {
+        $phone = $this->getValue('phone');
+        $password = $this->getValue('password');
+        if (preg_match('/^[\w_]{9,25}$/', $password) != 1) {
+            $msg = ['status' => 0, 'message' => 'the password is incorrectness'];
+            echo json_encode($msg);
+            return;
+        } else {
+            $password = md5($password);
+        }
+        $result = $this->updateOne('user', 'password', 'phone', $phone, $password, 'string');
+        if ($result > 0) {
+            $msg = ['status' => 1, 'message' => 'modification success'];
+        } else {
+            $msg = ['status' => 0, 'message' => 'modification defeated'];
+        }
+        echo json_encode($msg);
+    }
+
+    public function lastPositionAction()
+    {
+        $id = $_SESSION['user_id'];
+        if ($id == null) {
+            $msg = ['status' => 0, 'messge' => 'login please'];
+            echo json_encode($msg);
+            return;
+        }
+        $friendId = $this->getValue('id');
+        $sql = 'SELECT `content` FROM `position_msg` WHERE `user_id` = ? AND `other_id` = ? ORDER BY `createtime` DESC LIMIT 1';
+        $pdoStatement = $this->mainPdo->prepare($sql);
+        $pdoStatement->bindValue(1, $friendId, PDO::PARAM_INT);
+        $pdoStatement->bindValue(2, 0, PDO::PARAM_INT);
+        $pdoStatement->execute();
+        $result = $pdoStatement->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            $this->addGetMeHistory($id, $friendId, $result['content']);
+            echo json_encode($result);
+        } else {
+            echo json_encode(['message' => 'no position info']);
+        }
+    }
+
+    private function addGetMeHistory($id, $friendId, $position)
+    {
+        $user = $this->getuser('id', $friendId);
+        $title = 'RESPONSEP';
+        $content = "{$title}:{$position}:{$user['id']}:{$user['name']}";
+        $sql = 'INSERT INTO `position_msg` (`user_id`, `other_id`, `title`, `content`, `createtime`) VALUES (?,?,?,?,?)';
+        $pdoStatement = $this->mainPdo->prepare($sql);
+        $pdoStatement->bindValue(1, $friendId, PDO::PARAM_INT);
+        $pdoStatement->bindValue(2, $id, PDO::PARAM_INT);
+        $pdoStatement->bindValue(3, $title, PDO::PARAM_STR);
+        $pdoStatement->bindValue(4, $content, PDO::PARAM_STR);
+        $pdoStatement->bindValue(5, time(), PDO::PARAM_STR);
+        $pdoStatement->execute();
+    }
+
+    public function renameAction()
+    {
+        $id = $_SESSION['user_id'];
+        if ($id == null) {
+            $msg = ['status' => 0, 'messge' => 'login please'];
+            echo json_encode($msg);
+            return;
+        }
+
+        $newName = $this->getValue('name');
+        $result = $this->updateOne('user', 'name', 'id', $id, $newName, 'string');
+        if ($result) {
+            $msg = ['status' => 1];
+        } else {
+            $msg = ['status' => 0];
+        }
+        echo json_encode($msg);
+    }
 }

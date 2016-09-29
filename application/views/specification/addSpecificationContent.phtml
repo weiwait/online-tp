@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<form action="" method="post" enctype="multipart/form-data">
+    <label><input type="hidden" name="MAX-FILE-SIZE" value="2000000"></label>
+    <label>image:<input type="file" name="image"></label>
+    <label>
+        <select name="id" id="">
+            <option>所属说明书</option>
+            <?php foreach ($specifications as $specification) {?>
+            <option value="<?php echo $specification['id'] ?>"><?php echo $specification['specification_name'] ?></option>
+            <?php }?>
+        </select>
+    </label>
+    <label>
+        <select name="lang" id="">
+            <option>语言</option>
+            <option value="cn">中文</option>
+            <option value="en">英文</option>
+        </select>
+    </label>
+    <label><input type="submit"></label>
+</form>
+</body>
+</html>

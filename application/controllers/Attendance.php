@@ -124,6 +124,9 @@ class AttendanceController extends ControlController
 
         $data = ServiceFactory::getService("Attendance")->getApp($tpAppid, $phonenumber);
         if ($data) {
+            $_SESSION['parent_id'] = $data[0]['parent_id'];
+            $_SESSION['user_id'] = $data[0]['id'];
+            $_SESSION['user_appId'] = $data[0]['appid'];
             $ret = array(
                 "status" => 1,
                 "data" => $data
@@ -790,20 +793,20 @@ class AttendanceController extends ControlController
             die();
         }
 
-        $machineid = trim($_REQUEST['machineid']);
-        if (empty($machineid)) {
-            $ret["data"] = "machineid is empty";
-            echo json_encode($ret);
-            die();
-        }
+//        $machineid = trim($_REQUEST['machineid']);
+//        if (empty($machineid)) {
+//            $ret["data"] = "machineid is empty";
+//            echo json_encode($ret);
+//            die();
+//        }
+//
+//        $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
+//        if (empty($tpMachineid)) {
+//            echo json_encode("machineid " . $machineid . " have not reg");
+//            die();
+//        }
 
-        $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            echo json_encode("machineid " . $machineid . " have not reg");
-            die();
-        }
-
-        $data = ServiceFactory::getService("Attendance")->getPunchMonth($tpAppid, $tpMachineid, $time);
+        $data = ServiceFactory::getService("Attendance")->getPunchMonth($tpAppid, $tpMachineid='', $time);
         $new_data = array();
 
 
@@ -897,20 +900,20 @@ class AttendanceController extends ControlController
             die();
         }
 
-        $machineid = trim($_REQUEST['machineid']);
-        if (empty($machineid)) {
-            $ret["data"] = "machineid is empty";
-            echo json_encode($ret);
-            die();
-        }
+//        $machineid = trim($_REQUEST['machineid']);
+//        if (empty($machineid)) {
+//            $ret["data"] = "machineid is empty";
+//            echo json_encode($ret);
+//            die();
+//        }
+//
+//        $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
+//        if (empty($tpMachineid)) {
+//            echo json_encode("machineid " . $machineid . " have not reg");
+//            die();
+//        }
 
-        $tpMachineid = ServiceFactory::getService("Machine")->getTpMachineid($machineid);
-        if (empty($tpMachineid)) {
-            echo json_encode("machineid " . $machineid . " have not reg");
-            die();
-        }
-
-        $data = ServiceFactory::getService("Attendance")->getPunchDay($tpAppid, $tpMachineid, $time);
+        $data = ServiceFactory::getService("Attendance")->getPunchDay($tpAppid, $tpMachineid = '', $time);
 
         $ret = array(
             "status" => 1,
@@ -1544,5 +1547,14 @@ class AttendanceController extends ControlController
                 die(json_encode($ret));
             }
         }
+    }
+
+    public function colleagueAction()
+    {
+        \Yaf_Dispatcher::getInstance()->disableView();
+        $parentId = $_SESSION['parent_id'];
+        $data = ServiceFactory::getService('Attendance')->getColleague($parentId);
+        header('ContentType:text/json');
+        $this->getResponse()->setBody(json_encode($data));
     }
 }

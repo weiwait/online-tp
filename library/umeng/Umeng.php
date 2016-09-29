@@ -346,8 +346,8 @@ class Umeng
             $customizedcast->setPredefinedKeyValue("production_mode", "false");
             print("Sending customizedcast notification, please wait...\r\n");
             if (count($customContent) > 0) {
-                foreach ($customContent as $define => $content) {
-                    $customizedcast->setCustomizedField($define, $content);
+                foreach ($customContent as $define => $item) {
+                    $customizedcast->setCustomizedField($define, $item);
                 }
             }
             $customizedcast->send();

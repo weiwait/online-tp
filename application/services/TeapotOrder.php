@@ -293,7 +293,7 @@ class TeapotOrder extends Service
     {
         //fei 2014-11-26 这里不能带上resulttime=0, 过滤那些取消预约的
         //$sql = "select week, heattime, costtime from teapot_order where tp_machineid='".$tpMachineid."' and isdelete='0' and iscancel='0' and resulttime='0'"; 
-        $sql = "select week, heattime, costtime from teapot_order where tp_machineid='".$tpMachineid."' and isdelete='0' and iscancel='0' and result !='cancelorderok'"; 
+        $sql = "select week, heattime, costtime from teapot_order where tp_machineid='".$tpMachineid."' and isdelete='0' and iscancel='0' and result !='cancelorderok' and `action` = 'heat'";
         DaoFactory::getDao("Shard")->branchDb($tpMachineid);
         $data = DaoFactory::getDao("Shard")->query($sql);
         if(empty($data))
@@ -306,64 +306,73 @@ class TeapotOrder extends Service
             $orderHeatTime = $item['heattime'];
             $orderCostTime = intval($item['costtime']);
 
-            if("0000000" == $orderWeek)
-            {
-                continue; 
+
+            $newStartTime = strtotime($heattime);
+            $newEndTime = $newStartTime + $costtime;
+            $oldStartTime = strtotime($orderHeatTime);
+            $oldEndTime = $oldStartTime + $orderCostTime;
+            $today = intval(date('w'));
+
+            if ('0000000' == $week && $newStartTime < time()) {
+                $week[$today + 1] = '1';
             }
 
-            if(7 != strlen($orderWeek))
-            {
-                continue; 
+            if ('0000000' == $orderWeek && $oldStartTime < time()) {
+                $orderWeek[$today + 1] = '1';
             }
 
-            if(empty($orderHeatTime))
-            {
-                continue; 
-            }
-            if(empty($orderCostTime))
-            {
-                continue; 
-            }
-
-            for($i=0; $i<7; ++$i)
-            {
-                $new = $week[$i];
-                $old = $orderWeek[$i];
-                if("0" == $new)
-                {
-                    continue; 
+            if ('0000000' == $week) {
+                if ('0000000' == $orderWeek) {
+                    if ($newEndTime < $oldStartTime || $newStartTime > $oldEndTime) {
+                        //时间无重合
+                        continue;
+                    } else {
+                        //时间重叠
+                        return false;
+                    }
+                } else {
+                    if ($orderWeek[$today] != '1') {
+                        continue;
+                    }
+                    if ($newEndTime < $oldStartTime || $newStartTime > $oldEndTime) {
+                        //时间无重合
+                        continue;
+                    } else {
+                        //时间重叠
+                        return false;
+                    }
                 }
-                if("0" == $old)
-                {
-                    continue; 
-                }
-                //大家预约了同一天
-                $newHour = intval(substr($heattime, 0, 2)); 
-                $newMin = intval(substr($heattime, 2, 2)); 
-                $newSec = intval(substr($heattime, 4, 2)); 
-
-                $oldHour = intval(substr($orderHeatTime, 0, 2)); 
-                $oldMin = intval(substr($orderHeatTime, 2, 2)); 
-                $oldSec = intval(substr($orderHeatTime, 4, 2)); 
-
-                $newStartTime = mktime($newHour, $newMin, $newSec, 1, 1, 2000); 
-                $newEndTime = $newStartTime + $costtime;
-
-                $oldStartTime = mktime($oldHour, $oldMin, $oldSec, 1, 1, 2000); 
-                $oldEndTime = $oldStartTime + $orderCostTime;
-
-                if( ($newStartTime < $oldStartTime && $newEndTime < $oldStartTime)  or ($newStartTime > $oldEndTime && $newEndTime > $oldEndTime)   )
-                {
-                    //时间无重合 
-                }
-                else
-                {
-                    //时间重叠
-                    return false;
+            } else {
+                if ('0000000' == $orderWeek) {
+                    if ($week[$today] != '1') {
+                        continue;
+                    }
+                    if ($newEndTime < $oldStartTime || $newStartTime > $oldEndTime) {
+                        //时间无重合
+                        continue;
+                    } else {
+                        //时间重叠
+                        return false;
+                    }
+                } else {
+                    for ($i = 0; $i < 7; $i++) {
+                        if ('1' == $week[$i] && '1' == $orderWeek[$i]) {
+                            if ($newEndTime < $oldStartTime || $newStartTime > $oldEndTime) {
+                                //时间无重合
+                                continue;
+                            } else {
+                                //时间重叠
+                                return false;
+                            }
+                        } else {
+                            continue;
+                        }
+                    }
                 }
             }
         }
         return true;
     }
+
 }
 

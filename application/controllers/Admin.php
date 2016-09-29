@@ -532,4 +532,8 @@ class AdminController extends MCommonController
         return null;
     }
 
+    public function specificationAction()
+    {
+        $this->getView();
+    }
 }
